@@ -73,7 +73,7 @@ public class UserManager {
     }
 
     public void sendUserToRedis(User user) {
-
+        System.out.println("test");
     }
 
     public void sendUserToMongo(User user) {
