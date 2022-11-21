@@ -1,14 +1,15 @@
 package fr.eloria.api.data.user;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.UpdateOptions;
 import fr.eloria.api.Api;
-import fr.eloria.api.data.rank.Rank;
+import fr.eloria.api.utils.GsonUtils;
 import lombok.Getter;
 import org.bson.Document;
 
-import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentMap;
 
@@ -23,85 +24,48 @@ public class UserManager {
         this.users = Maps.newConcurrentMap();
     }
 
-    public User getUser(UUID uuid) {
-        // Get From redis
-        return new User(uuid, new Rank());
+    private String getRedisKey(UUID uuid) {
+        return "users:" + uuid.toString();
     }
 
     public void saveUsers() {
         getUsers().clear();
     }
 
-    public void onNetworkJoin(UUID uuid) {
-        User user = getUserFromMongo(uuid);
-
-        sendUserToRedis(user);
-        addUser(user);
-    }
-
-    public void onJoin(UUID uuid) {
-        User user = getUserFromRedis(uuid);
-
-        addUser(user);
-    }
-
-    public void onNetworkLeave(UUID uuid) {
-        User user = getUserFromRedis(uuid);
-
-        sendUserToMongo(user);
-        removeUserFromRedis(user);
-        removeUser(uuid);
-    }
-
-    public void onLeave(UUID uuid) {
-        User user = getUserFromRedis(uuid);
-
-        sendUserToRedis(user);
-        removeUser(uuid);
-    }
-
-    public void addUser(UUID uuid, User user) {
-        getUsers().put(uuid, user);
-    }
-
     public void addUser(User user) {
-        addUser(user.getUuid(), user);
+        getUsers().put(user.getUuid(), user);
     }
 
-    public void removeUser(UUID uuid) {
-        getUsers().remove(uuid);
-    }
-
-    public void sendUserToRedis(User user) {
-        System.out.println("test");
-    }
-
-    public void sendUserToMongo(User user) {
-
-    }
-
-    public void removeUserFromRedis(User user) {
-
-    }
-
-    public void removeUserFromMongo(User user) {
-
+    public void removeUser(User user) {
+        getUsers().remove(user.getUuid());
     }
 
     public User getUserFromRedis(UUID uuid) {
-        return new User(uuid, new Rank());
+        return Api.getInstance().getRedisManager().get(getRedisKey(uuid), User.class);
     }
 
     public User getUserFromMongo(UUID uuid) {
-        return new User(uuid, new Rank());
+        return GsonUtils.GSON.fromJson(Objects.requireNonNull(getUserCollection().find(Filters.eq("_id", uuid.toString())).first()).toJson(), User.class);
     }
 
-    public User documentToUser(Document document) {
-        return new User(
-                UUID.fromString(document.getString("_id")),
-                Api.getInstance().getRankManager().getRank(document.getString("rank"))
-        );
+    public boolean userExistInMongo(UUID uuid) {
+        return getUserCollection().find(Filters.eq("_id", uuid.toString())).first() != null;
     }
 
+    public void sendUserToRedis(User user) {
+        Api.getInstance().getRedisManager().set(getRedisKey(user.getUuid()), user);
+    }
+
+    public void sendUserToMongo(User user) {
+        getUserCollection().updateOne(Filters.eq("_id", user.getUuid().toString()), new Document("$set", user.toDocument()), new UpdateOptions().upsert(true));
+    }
+
+    public void removeUserFromRedis(User user) {
+        Api.getInstance().getRedisManager().del(getRedisKey(user.getUuid()));
+    }
+
+    public void removeUserFromMongo(User user) {
+        getUserCollection().deleteOne(new Document("_id", user.getUuid().toString()));
+    }
 
 }

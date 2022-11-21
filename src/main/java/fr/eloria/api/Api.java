@@ -22,7 +22,7 @@ public class Api extends AbstractHandler {
     public Api() {
         instance = this;
         this.mongoManager = new MongoManager(new DatabaseCredentials().setUrl("mongodb://localhost:27017").setDatabaseName("eloria"));
-        this.redisManager = new RedisManager(new DatabaseCredentials());
+        this.redisManager = new RedisManager(new DatabaseCredentials().setHost("127.0.0.1").setPort(6379).setUsername("eloria:api").setPassword("foobared"), false);
 
         this.rankManager = new RankManager();
         this.userManager = new UserManager();

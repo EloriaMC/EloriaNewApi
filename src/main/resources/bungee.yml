@@ -1,0 +1,4 @@
+main: fr.eloria.api.plugin.bungee.BungeePlugin
+name: EloriaAPI
+website: eloria.fr
+version: 1.0.0

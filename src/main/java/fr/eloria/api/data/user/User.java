@@ -17,8 +17,8 @@ public class User {
     private Rank rank;
 
     public Document toDocument() {
-        return new Document("_id", getUuid().toString())
-                .append("rank", getRank().getName());
+        return new Document("_id", this.uuid.toString())
+                .append("rank", this.rank.getName());
     }
 
 }
