@@ -5,6 +5,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.UpdateOptions;
 import fr.eloria.api.Api;
+import fr.eloria.api.data.user.data.UserSettings;
 import fr.eloria.api.utils.json.GsonUtils;
 import lombok.Getter;
 import org.bson.Document;
@@ -26,6 +27,11 @@ public class UserManager {
 
     private String getRedisKey(UUID uuid) {
         return "users:" + uuid.toString();
+    }
+
+    public User getNewUser(UUID uuid) {
+        return new User(uuid, Api.getInstance().getRankManager().getDefaultRank(),
+                new UserSettings(true, true, true, false));
     }
 
     public void saveUsers() {

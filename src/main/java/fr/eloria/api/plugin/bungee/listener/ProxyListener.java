@@ -2,6 +2,7 @@ package fr.eloria.api.plugin.bungee.listener;
 
 import fr.eloria.api.Api;
 import fr.eloria.api.data.user.User;
+import fr.eloria.api.data.user.data.UserSettings;
 import fr.eloria.api.plugin.bungee.BungeePlugin;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,7 +24,7 @@ public class ProxyListener implements Listener {
     public void onPlayerJoin(PostLoginEvent event) {
         ProxyServer.getInstance().getScheduler().runAsync(getPlugin(), () -> {
             ProxiedPlayer player = event.getPlayer();
-            User user = plugin.getApi().getUserManager().userExistInMongo(player.getUniqueId()) ? plugin.getApi().getUserManager().getUserFromMongo(event.getPlayer().getUniqueId()) : new User(player.getUniqueId(), plugin.getApi().getRankManager().getDefaultRank());
+            User user = plugin.getApi().getUserManager().userExistInMongo(player.getUniqueId()) ? plugin.getApi().getUserManager().getUserFromMongo(event.getPlayer().getUniqueId()) : Api.getInstance().getUserManager().getNewUser(player.getUniqueId());
 
             plugin.getApi().getUserManager().sendUserToRedis(user);
             plugin.getApi().getUserManager().addUser(user);
