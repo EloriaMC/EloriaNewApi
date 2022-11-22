@@ -1,10 +1,12 @@
 package fr.eloria.api.data.rank;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.UpdateOptions;
 import fr.eloria.api.Api;
+import fr.eloria.api.utils.json.GsonUtils;
 import lombok.Getter;
 import org.bson.Document;
 
@@ -24,16 +26,30 @@ public class RankManager {
         this.ranks = Maps.newConcurrentMap();
     }
 
+    private String getRedisKey(String rankName) {
+        return "rank:" + rankName;
+    }
+
     public void loadRanks() {
-        getRankCollection().find().iterator().forEachRemaining(this::addRank);
+        if (Api.getInstance().isBungee())
+            getRankCollection().find().iterator().forEachRemaining(this::addRank);
+        else
+            getRanksFromRedis().forEach(this::addRank);
     }
 
     public void saveRanks() {
-        getRanks().values().forEach(this::updateRankInMongo);
+        if (Api.getInstance().isBungee()) {
+            getRanks().values().forEach(rank -> {
+                updateRankInMongo(rank);
+                removeRankFromRedis(rank.getName());
+            });
+        }
+
         getRanks().values().stream().map(Rank::getName).forEach(this::removeRank);
     }
 
     public void addRank(Rank rank) {
+        if (Api.getInstance().isBungee()) sendRankToRedis(rank);
         getRanks().putIfAbsent(rank.getName(), rank);
         System.out.println("[RankManager] Added " + rank.getName() + " rank");
     }
@@ -86,12 +102,26 @@ public class RankManager {
         getRankCollection().deleteOne(new Document("_id", rankName));
     }
 
+    public Rank getRankFromRedis(String rankName) {
+        return GsonUtils.GSON.fromJson(Api.getInstance().getRedisManager().getJedis().hget(getRedisKey(rankName), "json"), Rank.class);
+    }
+
+    public void sendRankToRedis(Rank rank) {
+        Api.getInstance().getRedisManager().getJedis().hset(getRedisKey(rank.getName()), "json", GsonUtils.GSON.toJson(rank));
+    }
+
+    public void removeRankFromRedis(String rankName) {
+        Api.getInstance().getRedisManager().getJedis().hdel(getRedisKey(rankName), "json");
+    }
+
+    public List<Rank> getRanksFromRedis() {
+        List<Rank> ranks = Lists.newLinkedList();
+        Api.getInstance().getRedisManager().getJedis().keys(getRedisKey("*")).forEach(rankKey -> Api.getInstance().getRedisManager().getJedis().hgetAll(rankKey).forEach((key, value) -> ranks.add(GsonUtils.GSON.fromJson(value, Rank.class))));
+        return ranks;
+    }
+
     public List<Rank> getRanksOrdainedByPower() {
-        return getRanks()
-                .values()
-                .stream()
-                .sorted(Comparator.comparingInt(Rank::getPower))
-                .collect(Collectors.toList());
+        return getRanks().values().stream().sorted(Comparator.comparingInt(Rank::getPower).reversed()).collect(Collectors.toList());
     }
 
 }

@@ -2,13 +2,11 @@ package fr.eloria.api.data.database.redis;
 
 import fr.eloria.api.data.database.AbstractDatabase;
 import fr.eloria.api.data.database.DatabaseCredentials;
-import fr.eloria.api.utils.GsonUtils;
+import fr.eloria.api.utils.json.GsonUtils;
 import lombok.Getter;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
-
-import java.util.Map;
 
 @Getter
 public class RedisManager extends AbstractDatabase {
@@ -34,10 +32,6 @@ public class RedisManager extends AbstractDatabase {
          getJedis().set(key, GsonUtils.GSON.toJson(clazz));
     }
 
-    public void hset(String key, Map<String, String> map){
-        getJedis().hset(key, map);
-    }
-
     public <T> T get(String key, Class<T> clazz) {
         return GsonUtils.GSON.fromJson(getJedis().get(key), clazz);
     }
@@ -48,10 +42,6 @@ public class RedisManager extends AbstractDatabase {
 
     public void del(String key) {
         getJedis().del(key);
-    }
-
-    public void hdel(String key){
-        getJedis().hdel(key);
     }
 
     @Override

@@ -4,7 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import fr.eloria.api.Api;
-import fr.eloria.api.utils.IAdapter;
+import fr.eloria.api.utils.json.IAdapter;
 import lombok.Getter;
 
 import java.util.UUID;

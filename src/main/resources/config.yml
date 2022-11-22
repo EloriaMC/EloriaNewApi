@@ -1,0 +1,14 @@
+####################################################
+#               Database Credentials               #
+####################################################
+
+redis:
+  host: "127.0.0.1"
+  port: 6379
+  userName: "eloria:api"
+  password: "foobared"
+  useSSL: false
+
+mongodb:
+  url: "mongodb://localhost:27017"
+  databaseName: "eloria"

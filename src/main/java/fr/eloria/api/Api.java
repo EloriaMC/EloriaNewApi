@@ -19,8 +19,12 @@ public class Api extends AbstractHandler {
     private final RankManager rankManager;
     private final UserManager userManager;
 
-    public Api() {
+    private final boolean isBungee;
+
+    public Api(boolean isBungee) {
         instance = this;
+        this.isBungee = isBungee;
+
         this.mongoManager = new MongoManager(new DatabaseCredentials().setUrl("mongodb://localhost:27017").setDatabaseName("eloria"));
         this.redisManager = new RedisManager(new DatabaseCredentials().setHost("127.0.0.1").setPort(6379).setUsername("eloria:api").setPassword("foobared"), false);
 

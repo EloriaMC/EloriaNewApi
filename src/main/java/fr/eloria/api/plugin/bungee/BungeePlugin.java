@@ -12,7 +12,7 @@ public class BungeePlugin extends Plugin {
 
     @Override
     public void onEnable() {
-        this.api = new Api();
+        this.api = new Api(true);
         getProxy().getPluginManager().registerListener(this, new ProxyListener(this));
     }
 
