@@ -1,0 +1,38 @@
+! CECI EST EN COUR DE REFLECTION TOUT CE QUI EST ECRIT RIQUE DE CHANGER !
+
+----------------------------------------------------[ MATCHMAKING ]----------------------------------------------------------------------
+envoyer le joueur sur le serveur avec le plus de joueur
+
+Serveur SkyWars-6 (5/8) Serveur SkyWars-3 (2/8) Serveur SkyWars-2 (0/8)
+
+ex: Joueur 1 -> Serveur SkyWars-6
+
+si aucun serveur existe ou sont plein créer un nouveau serveur (faire une vérif pour lancer qu'un seul serveur soit lancé et pas plussieurs)
+
+si trop de serveur sont allumé avec 0 joueurs ex (plus de 3 serv skywars avec 0 joueurs) faire un sorte d'en laisé un seul d'allumé et d'éteindre les autres
+
+
+        A VOIR POUR FAIRE UN SYSTEME DE PARTIE RANKED (pour que les joueurs classés MASTER joue qu'avec des masters et/ou des joueurs proche de ce rang)
+
+----------------------------------------------------[ LOAD BALANCING ]----------------------------------------------------------------------
+
+envoyer le joueur qui se connecte au network sur le serveur lobby le moins peuplé
+
+parreile avec /hub sauf si il veux se co a un hub particulier ex : /hub hub-1
+
+----------------------------------------------------[ DATA MANAGER ]------------------------------------------------------------------------
+
+
+pour gerer les stats des joueurs dans les mini jeux faire une liste des joueurs sur le minijeu List<SkywarPlayer>
+
+SkywarPlayer (kills, deaths, ect)
+
+a chaque fin de minijeu envoyer les stats de tout les joueurs sur redis au bungee (pubsub) quand il va lire il va transformé tout en une classe ex: AbstractData
+
+avec tout les stats (kills, deaths, ect) attention ne pas utiliser pour l'expérience, l'argent gagné juste a faire un UserManager.getUser().addCoins ect
+
+puis vérifier si il a pas deja des stats sinon juste a modifier et ne pas créer un nouveau document
+
+----------------------------------------------------[                  ]------------------------------------------------------------------------
+
+! CECI EST EN COUR DE REFLECTION TOUT CE QUI EST ECRIT RIQUE DE CHANGER !
