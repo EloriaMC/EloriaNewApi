@@ -33,7 +33,6 @@ public class PlayerListener implements Listener {
         });
     }
 
-
     /*
             Test
      */
@@ -67,7 +66,6 @@ public class PlayerListener implements Listener {
             Player player = event.getPlayer();
             User user = getPlugin().getApi().getUserManager().getUsers().get(player.getUniqueId());
 
-            getPlugin().getApi().getUserManager().sendUserToRedis(user);
             getPlugin().getApi().getUserManager().removeUser(user);
         });
     }

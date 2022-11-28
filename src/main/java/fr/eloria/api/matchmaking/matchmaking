@@ -1,0 +1,10 @@
+!!! PAS DE MATCH MAKING POUR LES SERVEURS QUI NE SONT PAS EN DYNAMIC (ex: pvpbox ect) !!!
+
+Enregistrement des types de queues sur mongo ou dans un queues.yml ?
+
+Lobby-0 : Joueur1 veux jouer en SkyWars -> AddPlayerToMatchMakingPacket(UUID, MiniGame Wanted) (pas oublier de le remove de sa current queue si en ya une)
+
+Bungee : Queue<MiniGame> , get le first player de la queue et le send au serveur mini jeu avec le + de co
+                           si le serv est plein en créer un nouveau, si le joueur a un grade le faire passer en priorité
+
+class MiniGameQueue (String name, List<UUID> queuedPlayer)

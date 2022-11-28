@@ -16,18 +16,22 @@ import java.util.UUID;
 public class User {
 
     private UUID uuid;
-    private Rank rank;
+    private String rankName;
 
     private UserSettings settings;
 
     public void setRank(Rank rank) {
-        this.rank = rank;
+        this.rankName = rank.getName();
         Api.getInstance().getUserManager().sendUserToRedis(this);
     }
 
+    public Rank getRank() {
+        return Api.getInstance().getRankManager().getRank(getRankName());
+    }
+
     public Document toDocument() {
-        return new Document("_id", getUuid().toString())
-                .append("rank", getRank().getName())
+        return new Document("uuid", getUuid().toString())
+                .append("rankName", getRank().getName())
                 .append("settings", getSettings().toDocument());
     }
 

@@ -30,7 +30,7 @@ public class UserManager {
     }
 
     public User getNewUser(UUID uuid) {
-        return new User(uuid, Api.getInstance().getRankManager().getDefaultRank(),
+        return new User(uuid, Api.getInstance().getRankManager().getDefaultRank().getName(),
                 new UserSettings(true, true, true, false));
     }
 
@@ -51,11 +51,11 @@ public class UserManager {
     }
 
     public User getUserFromMongo(UUID uuid) {
-        return GsonUtils.GSON.fromJson(Objects.requireNonNull(getUserCollection().find(Filters.eq("_id", uuid.toString())).first()).toJson(), User.class);
+        return GsonUtils.GSON.fromJson(Objects.requireNonNull(getUserCollection().find(Filters.eq("uuid", uuid.toString())).first()).toJson(), User.class);
     }
 
     public boolean userExistInMongo(UUID uuid) {
-        return getUserCollection().find(Filters.eq("_id", uuid.toString())).first() != null;
+        return getUserCollection().find(Filters.eq("uuid", uuid.toString())).first() != null;
     }
 
     public void sendUserToRedis(User user) {
@@ -63,7 +63,7 @@ public class UserManager {
     }
 
     public void sendUserToMongo(User user) {
-        getUserCollection().updateOne(Filters.eq("_id", user.getUuid().toString()), new Document("$set", user.toDocument()), new UpdateOptions().upsert(true));
+        getUserCollection().updateOne(Filters.eq("uuid", user.getUuid().toString()), new Document("$set", user.toDocument()), new UpdateOptions().upsert(true));
     }
 
     public void removeUserFromRedis(User user) {
@@ -71,7 +71,7 @@ public class UserManager {
     }
 
     public void removeUserFromMongo(User user) {
-        getUserCollection().deleteOne(new Document("_id", user.getUuid().toString()));
+        getUserCollection().deleteOne(new Document("uuid", user.getUuid().toString()));
     }
 
 }

@@ -2,8 +2,6 @@ package fr.eloria.api.utils.json;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import fr.eloria.api.data.user.User;
-import fr.eloria.api.data.user.UserAdapter;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -16,7 +14,7 @@ public class GsonUtils {
                 .disableHtmlEscaping()
                 .setPrettyPrinting()
                 .serializeNulls()
-                .registerTypeAdapter(User.class, new UserAdapter())
+                .registerTypeAdapterFactory(InterfaceAdapter.getInterfaceTypeAdapterFactory())
                 .create();
     }
 
