@@ -5,6 +5,7 @@ import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
+import fr.eloria.api.Api;
 import fr.eloria.api.data.database.AbstractDatabase;
 import fr.eloria.api.data.database.DatabaseCredentials;
 import lombok.Getter;
@@ -20,16 +21,17 @@ public class MongoManager extends AbstractDatabase {
 
     public MongoManager(DatabaseCredentials credentials) {
         super(credentials);
-        this.connect();
     }
 
     @Override
     public void connect() {
-        CodecRegistry pojoCodecProvider = CodecRegistries.fromProviders(PojoCodecProvider.builder().automatic(true).build());
-        CodecRegistry codecRegistry = CodecRegistries.fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), pojoCodecProvider);
+        if (Api.getInstance().isBungee()) {
+            CodecRegistry pojoCodecProvider = CodecRegistries.fromProviders(PojoCodecProvider.builder().automatic(true).build());
+            CodecRegistry codecRegistry = CodecRegistries.fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), pojoCodecProvider);
 
-        this.mongoClientSettings = MongoClientSettings.builder().applyConnectionString(new ConnectionString(getCredentials().getUrl())).codecRegistry(codecRegistry).build();
-        this.mongoClient = MongoClients.create(this.mongoClientSettings);
+            this.mongoClientSettings = MongoClientSettings.builder().applyConnectionString(new ConnectionString(getCredentials().getUrl())).codecRegistry(codecRegistry).build();
+            this.mongoClient = MongoClients.create(this.mongoClientSettings);
+        }
     }
 
     public MongoDatabase getDatabase() {

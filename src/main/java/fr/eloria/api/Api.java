@@ -36,6 +36,7 @@ public class Api extends AbstractHandler {
 
     @Override
     public void load() {
+        getMongoManager().connect();
         getRankManager().loadRanks();
     }
 

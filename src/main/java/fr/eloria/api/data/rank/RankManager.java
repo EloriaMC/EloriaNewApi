@@ -48,7 +48,7 @@ public class RankManager {
         getRanks().values().stream().map(Rank::getName).forEach(this::removeRank);
     }
 
-    public void addRank(Rank rank) {
+    private void addRank(Rank rank) {
         if (Api.getInstance().isBungee()) sendRankToRedis(rank);
         getRanks().putIfAbsent(rank.getName(), rank);
         System.out.println("[RankManager] Added " + rank.getName() + " rank");

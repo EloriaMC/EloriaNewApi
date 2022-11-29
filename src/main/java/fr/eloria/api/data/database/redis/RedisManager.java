@@ -8,10 +8,6 @@ import lombok.Getter;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
-import redis.clients.jedis.JedisPubSub;
-
-import java.nio.charset.StandardCharsets;
-import java.util.UUID;
 
 @Getter
 public class RedisManager extends AbstractDatabase {
