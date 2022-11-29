@@ -34,11 +34,8 @@ public class MatchMakingManager {
     }
 
     public void saveQueues() {
-        getQueues().forEach(queue -> {
-                updateQueueInMongo(queue.getName(), queue);
-                removeQueueFromRedis(queue.getName());
-        });
-
+        getQueues().forEach(queue -> queue.getQueuedPlayer().clear());
+        getQueues().stream().map(MatchQueue::getName).forEach(this::removeQueueFromRedis);
         getQueues().forEach(getQueues()::remove);
     }
 
@@ -49,15 +46,19 @@ public class MatchMakingManager {
     }
 
     public MatchQueue getQueueFromRedis(String queueName) {
-        return GsonUtils.GSON.fromJson(getPlugin().getApi().getRedisManager().getJedis().hget(getRedisKey(queueName), "json"), MatchQueue.class);
+        return GsonUtils.GSON.fromJson(getPlugin().getApi().getRedisManager().getJedis().get(getRedisKey(queueName)), MatchQueue.class);
     }
 
     public void sendQueueToRedis(MatchQueue queue) {
-        getPlugin().getApi().getRedisManager().getJedis().hset(getRedisKey(queue.getName()), "json", GsonUtils.GSON.toJson(queue));
+        getPlugin().getApi().getRedisManager().getJedis().set(getRedisKey(queue.getName()), GsonUtils.GSON.toJson(queue));
     }
 
     public void removeQueueFromRedis(String queueName) {
-        getPlugin().getApi().getRedisManager().getJedis().hdel(getRedisKey(queueName), queueName);
+        getPlugin().getApi().getRedisManager().getJedis().del(getRedisKey(queueName), queueName);
+    }
+
+    public void updateQueueInMongo(MatchQueue newQueue) {
+        updateQueueInMongo(newQueue.getName(), newQueue);
     }
 
     public void updateQueueInMongo(String queueName, MatchQueue newQueue) {

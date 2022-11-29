@@ -3,24 +3,32 @@ package fr.eloria.api.plugin.bungee.matchmaking;
 import be.alexandre01.dnplugin.api.objects.server.DNServer;
 import com.google.common.collect.Lists;
 import fr.eloria.api.utils.BungeeUtils;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import org.bson.codecs.pojo.annotations.BsonIgnore;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 import java.util.UUID;
 
 @Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class MatchQueue {
 
     @BsonProperty(value = "_id")
-    private final String name;
+    private String name;
 
-    private final int maxPlayers;
-    private final Queue<UUID> queuedPlayer;
+    private int maxPlayers;
+
+    @BsonIgnore
+    private Queue<UUID> queuedPlayer;
 
     public MatchQueue(String name, int maxPlayers) {
         this.name = name;
@@ -34,7 +42,6 @@ public class MatchQueue {
        if (bestServer != null) {
            getPlayer(uuid).connect(ProxyServer.getInstance().getServerInfo(bestServer.getFullName()));
        }
-
     }
 
     public ProxiedPlayer getPlayer(UUID uuid) {

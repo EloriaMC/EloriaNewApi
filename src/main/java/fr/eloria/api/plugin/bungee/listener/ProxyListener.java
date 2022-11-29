@@ -24,10 +24,10 @@ public class ProxyListener implements Listener {
     public void onPlayerJoin(PostLoginEvent event) {
         ProxyServer.getInstance().getScheduler().runAsync(getPlugin(), () -> {
             ProxiedPlayer player = event.getPlayer();
-            User user = plugin.getApi().getUserManager().userExistInMongo(player.getUniqueId()) ? plugin.getApi().getUserManager().getUserFromMongo(event.getPlayer().getUniqueId()) : Api.getInstance().getUserManager().getNewUser(player.getUniqueId());
+            User user = getPlugin().getApi().getUserManager().userExistInMongo(player.getUniqueId()) ? getPlugin().getApi().getUserManager().getUserFromMongo(event.getPlayer().getUniqueId()) : getPlugin().getApi().getUserManager().getNewUser(player.getUniqueId());
 
-            plugin.getApi().getUserManager().sendUserToRedis(user);
-            plugin.getApi().getUserManager().addUser(user);
+            getPlugin().getApi().getUserManager().sendUserToRedis(user);
+            getPlugin().getApi().getUserManager().addUser(user);
         });
     }
 
@@ -35,12 +35,13 @@ public class ProxyListener implements Listener {
     public void onPlayerLeave(PlayerDisconnectEvent event) {
         ProxyServer.getInstance().getScheduler().runAsync(getPlugin(), () -> {
             ProxiedPlayer player = event.getPlayer();
-            User user = plugin.getApi().getUserManager().getUserFromRedis(player.getUniqueId());
+            User user = getPlugin().getApi().getUserManager().getUserFromRedis(player.getUniqueId());
 
-            plugin.getApi().getUserManager().removeUserFromRedis(user);
-            plugin.getApi().getUserManager().sendUserToMongo(user);
+            getPlugin().getApi().getUserManager().removeUserFromRedis(user);
+            getPlugin().getApi().getUserManager().sendUserToMongo(user);
 
-            plugin.getApi().getUserManager().removeUser(user);
+            getPlugin().getMatchMakingManager().getQueues().forEach(queue -> queue.getQueuedPlayer().stream().filter(player.getUniqueId()::equals).forEach(queue::removePlayer));
+            getPlugin().getApi().getUserManager().removeUser(user);
         });
     }
 

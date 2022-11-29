@@ -10,6 +10,7 @@ import fr.eloria.api.plugin.spigot.listener.PlayerListener;
 import fr.eloria.api.utils.command.ECommandHandler;
 import fr.eloria.api.utils.command.annotation.ECommand;
 import lombok.Getter;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
