@@ -1,8 +1,6 @@
 package fr.eloria.api.plugin.bungee.listener;
 
-import fr.eloria.api.Api;
 import fr.eloria.api.data.user.User;
-import fr.eloria.api.data.user.data.UserSettings;
 import fr.eloria.api.plugin.bungee.BungeePlugin;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

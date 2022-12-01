@@ -1,4 +1,4 @@
-! CECI EST EN COUR DE REFLECTION TOUT CE QUI EST ECRIT RIQUE DE CHANGER !
+! CECI EST EN COUR DE REFLECTION TOUT CE QUI EST ECRIT RISQUE DE CHANGER !
 
 ----------------------------------------------------[ MATCHMAKING ]----------------------------------------------------------------------
 envoyer le joueur sur le serveur avec le plus de joueur
@@ -35,4 +35,4 @@ puis vérifier si il a pas deja des stats sinon juste a modifier et ne pas crée
 
 ----------------------------------------------------[                  ]------------------------------------------------------------------------
 
-! CECI EST EN COUR DE REFLECTION TOUT CE QUI EST ECRIT RIQUE DE CHANGER !
+! CECI EST EN COUR DE REFLECTION TOUT CE QUI EST ECRIT RISQUE DE CHANGER !
