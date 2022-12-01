@@ -17,5 +17,5 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
     implementation 'org.mongodb:mongo-java-driver:3.12.11'
     implementation 'redis.clients:jedis:4.3.1'
-    implementation 'org.slf4j:slf4j-nop:2.0.4'
+    implementation 'org.slf4j:slf4j-nop:2.0.5'
 }

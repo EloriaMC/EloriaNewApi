@@ -1,4 +1,4 @@
-package fr.eloria.api.plugin.bungee.matchmaking;
+package fr.eloria.api.plugin.bungee.common.matchmaking;
 
 import be.alexandre01.dnplugin.api.objects.server.DNServer;
 import com.google.common.collect.Lists;

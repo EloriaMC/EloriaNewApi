@@ -4,6 +4,7 @@ import fr.eloria.api.data.user.User;
 import fr.eloria.api.plugin.spigot.SpigotPlugin;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -30,6 +31,7 @@ public class PlayerListener implements Listener {
             User user = getPlugin().getApi().getUserManager().getUserFromRedis(player.getUniqueId());
 
             getPlugin().getApi().getUserManager().addUser(user);
+            player.spigot().sendMessage(new TextComponent("cc"), new TextComponent("cc"));
         });
     }
 

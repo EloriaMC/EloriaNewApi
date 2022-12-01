@@ -14,7 +14,7 @@ public class GsonUtils {
                 .disableHtmlEscaping()
                 .setPrettyPrinting()
                 .serializeNulls()
-                .registerTypeAdapterFactory(InterfaceAdapter.getInterfaceTypeAdapterFactory())
+                //.registerTypeAdapterFactory(InterfaceAdapter.getInterfaceTypeAdapterFactory())
                 .create();
     }
 

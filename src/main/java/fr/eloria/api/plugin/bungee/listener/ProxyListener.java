@@ -40,7 +40,7 @@ public class ProxyListener implements Listener {
             getPlugin().getApi().getUserManager().removeUserFromRedis(user);
             getPlugin().getApi().getUserManager().sendUserToMongo(user);
 
-            getPlugin().getMatchMakingManager().getQueues().forEach(queue -> queue.getQueuedPlayer().stream().filter(player.getUniqueId()::equals).forEach(queue::removePlayer));
+            getPlugin().getLoader().getMatchMakingManager().getQueues().forEach(queue -> queue.getQueuedPlayer().stream().filter(player.getUniqueId()::equals).forEach(queue::removePlayer));
             getPlugin().getApi().getUserManager().removeUser(user);
         });
     }

@@ -1,16 +1,17 @@
 package fr.eloria.api.plugin.spigot;
 
+import com.google.gson.reflect.TypeToken;
 import fr.eloria.api.Api;
-import fr.eloria.api.data.database.redis.pubsub.packet.TestPacket;
+import fr.eloria.api.data.database.redis.packet.TestPacket;
 import fr.eloria.api.plugin.spigot.command.RankCommand;
 import fr.eloria.api.plugin.spigot.command.ServerInfoCommand;
-import fr.eloria.api.utils.command.converter.PlayerConvertor;
-import fr.eloria.api.utils.command.converter.RankConvertor;
 import fr.eloria.api.plugin.spigot.listener.PlayerListener;
+import fr.eloria.api.utils.SpigotUtils;
 import fr.eloria.api.utils.command.ECommandHandler;
 import fr.eloria.api.utils.command.annotation.ECommand;
+import fr.eloria.api.utils.command.converter.PlayerConvertor;
+import fr.eloria.api.utils.command.converter.RankConvertor;
 import lombok.Getter;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -33,6 +34,7 @@ public class SpigotPlugin extends JavaPlugin {
         getCommandHandler().registerConverters(new RankConvertor(this), new PlayerConvertor());
         getCommandHandler().registerCommands(this, new ServerInfoCommand(this), new RankCommand(this));
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
+        getApi().getRedisManager().getRedisMessenger().register("test", TypeToken.get(TestPacket.class), false);
     }
 
     @ECommand(name = "dev")
@@ -43,7 +45,7 @@ public class SpigotPlugin extends JavaPlugin {
 
     @ECommand(name = "redisTest")
     public void executeRedisTest(CommandSender sender) {
-        getApi().getRedisManager().getRedisMessenger().sendMessage("eloria", new TestPacket("Hello redis !!!"));
+        getApi().getRedisManager().getRedisMessenger().getChannel("test", TestPacket.class).sendMessage(new TestPacket("hello redis !"));
     }
 
     @Override

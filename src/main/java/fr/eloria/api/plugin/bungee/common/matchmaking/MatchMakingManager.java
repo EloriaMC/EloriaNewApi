@@ -1,4 +1,4 @@
-package fr.eloria.api.plugin.bungee.matchmaking;
+package fr.eloria.api.plugin.bungee.common.matchmaking;
 
 import com.google.common.collect.Lists;
 import com.mongodb.client.MongoCollection;
@@ -10,6 +10,7 @@ import lombok.Getter;
 import org.bson.Document;
 
 import java.util.List;
+import java.util.Queue;
 
 @Getter
 public class MatchMakingManager {
@@ -34,7 +35,7 @@ public class MatchMakingManager {
     }
 
     public void saveQueues() {
-        getQueues().forEach(queue -> queue.getQueuedPlayer().clear());
+        getQueues().stream().map(MatchQueue::getQueuedPlayer).forEach(Queue::clear);
         getQueues().stream().map(MatchQueue::getName).forEach(this::removeQueueFromRedis);
         getQueues().forEach(getQueues()::remove);
     }

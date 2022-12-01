@@ -8,3 +8,7 @@ Bungee : Queue<MiniGame> , get le first player de la queue et le send au serveur
                            si le serv est plein en créer un nouveau, si le joueur a un grade le faire passer en priorité
 
 class MiniGameQueue (String name, List<UUID> queuedPlayer)
+
+Faire un autostart -> onLoadQueues() -> getQueues.map(Queue::getName).foreach(name -> DNBungeeAPI.getInstance().getRequestManager().sendRequest(RequestType.CORE_START_SERVER, name))
+
+Faire l'update des queues
