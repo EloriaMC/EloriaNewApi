@@ -1,8 +1,10 @@
 package fr.eloria.api.data.database.redis.packet;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-@Data
+@Getter
+@AllArgsConstructor
 public class TestPacket {
 
     private final String text;

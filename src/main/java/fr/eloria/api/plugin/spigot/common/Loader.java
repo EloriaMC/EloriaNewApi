@@ -1,10 +1,10 @@
 package fr.eloria.api.plugin.spigot.common;
 
-import com.google.gson.reflect.TypeToken;
 import fr.eloria.api.data.database.redis.packet.TestPacket;
 import fr.eloria.api.plugin.spigot.SpigotPlugin;
 import fr.eloria.api.plugin.spigot.command.RankCommand;
 import fr.eloria.api.plugin.spigot.command.ServerInfoCommand;
+import fr.eloria.api.plugin.spigot.common.redis.RedisMessenger;
 import fr.eloria.api.plugin.spigot.listener.PlayerListener;
 import fr.eloria.api.utils.AbstractHandler;
 import fr.eloria.api.utils.command.ECommandHandler;
@@ -22,10 +22,13 @@ import java.util.Arrays;
 public class Loader extends AbstractHandler {
 
     private final SpigotPlugin plugin;
+
+    private final RedisMessenger redisMessenger;
     private final ECommandHandler commandHandler;
 
     public Loader(SpigotPlugin plugin) {
         this.plugin = plugin;
+        this.redisMessenger = new RedisMessenger(plugin);
         this.commandHandler = new ECommandHandler(plugin, "api");
 
         this.load();
@@ -33,8 +36,7 @@ public class Loader extends AbstractHandler {
 
     @Override
     public void load() {
-        getPlugin().getApi().getRedisManager().getRedisMessenger().register("test", TypeToken.get(TestPacket.class), false);
-
+        getRedisMessenger().load();
         getCommandHandler().registerConverters(new RankConvertor(getPlugin()), new PlayerConvertor());
         getCommandHandler().registerCommands(this, new ServerInfoCommand(getPlugin()), new RankCommand(getPlugin()));
 
@@ -49,7 +51,7 @@ public class Loader extends AbstractHandler {
 
     @ECommand(name = "redisTest")
     public void executeRedisTest(CommandSender sender) {
-        getPlugin().getApi().getRedisManager().getRedisMessenger().getChannel("test", TestPacket.class).sendMessage(new TestPacket("hello redis !"));
+        getRedisMessenger().sendMessage("channel", new TestPacket("cc redis !!!"));
     }
 
     public void registerListeners(Listener... listeners) {
@@ -63,7 +65,7 @@ public class Loader extends AbstractHandler {
 
     @Override
     public void unload() {
-
+        getRedisMessenger().unload();
     }
 
 }

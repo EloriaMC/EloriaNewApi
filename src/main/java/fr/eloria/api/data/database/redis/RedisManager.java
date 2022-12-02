@@ -1,10 +1,7 @@
 package fr.eloria.api.data.database.redis;
 
-import fr.eloria.api.Api;
 import fr.eloria.api.data.database.AbstractDatabase;
 import fr.eloria.api.data.database.DatabaseCredentials;
-import fr.eloria.api.data.database.redis.messenger.IRedisMessenger;
-import fr.eloria.api.data.database.redis.messenger.RedisMessenger;
 import fr.eloria.api.utils.json.GsonUtils;
 import lombok.Getter;
 import redis.clients.jedis.Jedis;
@@ -16,7 +13,6 @@ public class RedisManager extends AbstractDatabase {
 
     private JedisPool jedisPool;
     private Jedis jedis;
-    private IRedisMessenger redisMessenger;
 
     private final boolean useSsl;
 
@@ -30,7 +26,6 @@ public class RedisManager extends AbstractDatabase {
     public void connect() {
         this.jedisPool = new JedisPool(new JedisPoolConfig(), getCredentials().getHost(), getCredentials().getPort(), 2000, isUseSsl());
         this.jedis = jedisPool.getResource();
-        this.redisMessenger = new RedisMessenger(jedisPool);
     }
 
     public <T> void set(String key, T clazz){
