@@ -33,6 +33,9 @@ avec tout les stats (kills, deaths, ect) attention ne pas utiliser pour l'expér
 
 puis vérifier si il a pas deja des stats sinon juste a modifier et ne pas créer un nouveau document
 
-----------------------------------------------------[                  ]------------------------------------------------------------------------
+----------------------------------------------------[ MESSAGING ]------------------------------------------------------------------------
+
+NE PLUS UTILISER LE PUBSUB DE REDIS TROP GALERE TROP DE PROBLEME AVEC CA GO UTILISER PULSAR OU AUTRES CONNERIES DE MESSAGING
+
 
 ! CECI EST EN COUR DE REFLECTION TOUT CE QUI EST ECRIT RISQUE DE CHANGER !
