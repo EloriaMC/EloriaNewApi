@@ -9,6 +9,7 @@ import fr.eloria.api.utils.json.GsonUtils;
 import lombok.Getter;
 import org.bson.Document;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Queue;
 
@@ -30,12 +31,15 @@ public class MatchMakingManager {
         return "queues:" + queueName;
     }
 
+    public MatchQueue getQueue(String queueName) {
+        return getQueues().stream().filter(matchQueue -> queueName.equals(matchQueue.getName())).findFirst().orElse(null);
+    }
+
     public void loadQueues() {
         getQueueCollection().find().iterator().forEachRemaining(this::addQueue);
     }
 
     public void saveQueues() {
-        getQueues().stream().map(MatchQueue::getQueuedPlayer).forEach(Queue::clear);
         getQueues().stream().map(MatchQueue::getName).forEach(this::removeQueueFromRedis);
         getQueues().forEach(getQueues()::remove);
     }
@@ -47,15 +51,15 @@ public class MatchMakingManager {
     }
 
     public MatchQueue getQueueFromRedis(String queueName) {
-        return GsonUtils.GSON.fromJson(getPlugin().getApi().getRedisManager().getJedis().get(getRedisKey(queueName)), MatchQueue.class);
+        return GsonUtils.GSON.fromJson(getPlugin().getApi().getRedisManager().get(getRedisKey(queueName)), MatchQueue.class);
     }
 
     public void sendQueueToRedis(MatchQueue queue) {
-        getPlugin().getApi().getRedisManager().getJedis().set(getRedisKey(queue.getName()), GsonUtils.GSON.toJson(queue));
+        getPlugin().getApi().getRedisManager().set(getRedisKey(queue.getName()), GsonUtils.GSON.toJson(queue));
     }
 
     public void removeQueueFromRedis(String queueName) {
-        getPlugin().getApi().getRedisManager().getJedis().del(getRedisKey(queueName), queueName);
+        getPlugin().getApi().getRedisManager().del(getRedisKey(queueName));
     }
 
     public void updateQueueInMongo(MatchQueue newQueue) {

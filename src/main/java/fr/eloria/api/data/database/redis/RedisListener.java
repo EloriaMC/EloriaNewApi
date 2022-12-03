@@ -1,15 +1,11 @@
 package fr.eloria.api.data.database.redis;
 
-import lombok.Getter;
 import redis.clients.jedis.JedisPubSub;
 
-@Getter
-public abstract class RedisListener extends JedisPubSub {
+public interface RedisListener {
 
-    private final String channelName;
+    JedisPubSub getPubSub();
 
-    public RedisListener(String channelName) {
-        this.channelName = channelName;
-    }
+    String getName();
 
 }

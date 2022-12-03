@@ -2,7 +2,9 @@ package fr.eloria.api.utils;
 
 import be.alexandre01.dnplugin.api.objects.server.DNServer;
 import be.alexandre01.dnplugin.plugins.bungeecord.api.DNBungeeAPI;
+import jdk.nashorn.internal.objects.NativeUint8Array;
 import lombok.experimental.UtilityClass;
+import org.omg.CORBA.PUBLIC_MEMBER;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -11,6 +13,10 @@ import java.util.stream.Collectors;
 
 @UtilityClass
 public class BungeeUtils {
+
+    public DNServer getServer(String serverName) {
+        return getServers(serverName.split("-")[0]).stream().filter(server -> serverName.equals(server.getFullName())).findFirst().orElse(null);
+    }
 
     public List<DNServer> getServers(String serviceName) {
         return new ArrayList<>(DNBungeeAPI.getInstance().getServices().get(serviceName).getServers().values());

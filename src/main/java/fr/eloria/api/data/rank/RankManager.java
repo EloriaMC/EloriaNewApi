@@ -12,17 +12,18 @@ import org.bson.Document;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
 @Getter
 public class RankManager {
 
-    private final MongoCollection<Rank> rankCollection;
+    private final MongoCollection<Document> rankCollection;
     private final ConcurrentMap<String, Rank> ranks;
 
     public RankManager() {
-        this.rankCollection = Api.getInstance().getMongoManager().getDatabase().getCollection("ranks", Rank.class);
+        this.rankCollection = Api.getInstance().getMongoManager().getDatabase().getCollection("ranks");
         this.ranks = Maps.newConcurrentMap();
     }
 
@@ -32,7 +33,7 @@ public class RankManager {
 
     public void loadRanks() {
         if (Api.getInstance().isBungee())
-            getRankCollection().find().iterator().forEachRemaining(this::addRank);
+            getRankCollection().find().iterator().forEachRemaining(document -> addRank(GsonUtils.GSON.fromJson(document.toJson(), Rank.class)));
         else
             getRanksFromRedis().forEach(this::addRank);
     }
@@ -79,11 +80,11 @@ public class RankManager {
     }
 
     public void updateRankInMongo(String rankName, Rank newRank) {
-        getRankCollection().updateOne(Filters.eq("_id", rankName), new Document("$set", newRank), new UpdateOptions().upsert(true));
+        getRankCollection().updateOne(Filters.eq("name", rankName), new Document("$set", newRank.toDocument()), new UpdateOptions().upsert(true));
     }
 
     public Rank getRankFromMongo(String rankName) {
-        return getRankCollection().find(Filters.eq("_id", rankName)).first();
+        return GsonUtils.GSON.fromJson(Objects.requireNonNull(getRankCollection().find(Filters.eq("name", rankName)).first()).toJson(), Rank.class);
     }
 
     public void updateRankInMongo(Rank newRank) {
@@ -95,28 +96,28 @@ public class RankManager {
     }
 
     public void sendRankToMongo(Rank rank) {
-        getRankCollection().insertOne(rank);
+        getRankCollection().insertOne(rank.toDocument());
     }
 
     public void removeRankFromMongo(String rankName) {
-        getRankCollection().deleteOne(new Document("_id", rankName));
+        getRankCollection().deleteOne(new Document("name", rankName));
     }
 
     public Rank getRankFromRedis(String rankName) {
-        return GsonUtils.GSON.fromJson(Api.getInstance().getRedisManager().getJedis().hget(getRedisKey(rankName), "json"), Rank.class);
+        return Api.getInstance().getRedisManager().get(getRedisKey(rankName), Rank.class);
     }
 
     public void sendRankToRedis(Rank rank) {
-        Api.getInstance().getRedisManager().getJedis().hset(getRedisKey(rank.getName()), "json", GsonUtils.GSON.toJson(rank));
+        Api.getInstance().getRedisManager().set(getRedisKey(rank.getName()), rank);
     }
 
     public void removeRankFromRedis(String rankName) {
-        Api.getInstance().getRedisManager().getJedis().hdel(getRedisKey(rankName), "json");
+        Api.getInstance().getRedisManager().del(getRedisKey(rankName));
     }
 
     public List<Rank> getRanksFromRedis() {
         List<Rank> ranks = Lists.newLinkedList();
-        Api.getInstance().getRedisManager().getJedis().keys(getRedisKey("*")).forEach(rankKey -> Api.getInstance().getRedisManager().getJedis().hgetAll(rankKey).forEach((key, value) -> ranks.add(GsonUtils.GSON.fromJson(value, Rank.class))));
+        Api.getInstance().getRedisManager().keys(getRedisKey("*")).forEach(key -> ranks.add(Api.getInstance().getRedisManager().get(key, Rank.class)));
         return ranks;
     }
 

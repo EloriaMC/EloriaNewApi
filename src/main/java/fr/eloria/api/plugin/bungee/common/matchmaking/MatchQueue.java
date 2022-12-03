@@ -49,7 +49,10 @@ public class MatchQueue {
     }
 
     public void addPlayer(UUID uuid) {
-        getQueuedPlayer().add(uuid);
+        if (!getQueuedPlayer().contains(uuid)) {
+            getQueuedPlayer().add(uuid);
+            System.out.println("[MatchMakingManager] Added " + ProxyServer.getInstance().getPlayer(uuid).getName() + " to " + getName() + " queue");
+        }
     }
 
     public void removePlayer(UUID uuid) {

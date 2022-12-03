@@ -2,6 +2,7 @@ package fr.eloria.api.plugin.bungee.common;
 
 import fr.eloria.api.plugin.bungee.BungeePlugin;
 import fr.eloria.api.plugin.bungee.command.DevCommand;
+import fr.eloria.api.plugin.bungee.command.HubCommand;
 import fr.eloria.api.plugin.bungee.common.matchmaking.MatchMakingManager;
 import fr.eloria.api.plugin.bungee.common.redis.RedisMessenger;
 import fr.eloria.api.plugin.bungee.listener.ProxyListener;
@@ -24,8 +25,6 @@ public class Loader extends AbstractHandler {
         this.plugin = plugin;
         this.redisMessenger = new RedisMessenger(plugin);
         this.matchMakingManager = new MatchMakingManager(plugin);
-
-        this.load();
     }
 
     @Override
@@ -33,7 +32,7 @@ public class Loader extends AbstractHandler {
         getMatchMakingManager().loadQueues();
         getRedisMessenger().load();
 
-        registerCommands(new DevCommand(getPlugin()));
+        registerCommands(new HubCommand(getPlugin()), new DevCommand(getPlugin()));
         registerListeners(new ProxyListener(getPlugin()));
     }
 

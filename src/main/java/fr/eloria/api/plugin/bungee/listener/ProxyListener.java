@@ -10,7 +10,6 @@ import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
-import net.md_5.bungee.event.EventPriority;
 
 @Getter
 @AllArgsConstructor
@@ -18,7 +17,7 @@ public class ProxyListener implements Listener {
 
     private final BungeePlugin plugin;
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler
     public void onPlayerJoin(PostLoginEvent event) {
         ProxyServer.getInstance().getScheduler().runAsync(getPlugin(), () -> {
             ProxiedPlayer player = event.getPlayer();
@@ -29,17 +28,17 @@ public class ProxyListener implements Listener {
         });
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler
     public void onPlayerLeave(PlayerDisconnectEvent event) {
         ProxyServer.getInstance().getScheduler().runAsync(getPlugin(), () -> {
             ProxiedPlayer player = event.getPlayer();
             User user = getPlugin().getApi().getUserManager().getUserFromRedis(player.getUniqueId());
 
-            getPlugin().getApi().getUserManager().removeUserFromRedis(user);
             getPlugin().getApi().getUserManager().sendUserToMongo(user);
 
-            getPlugin().getLoader().getMatchMakingManager().getQueues().forEach(queue -> queue.getQueuedPlayer().stream().filter(player.getUniqueId()::equals).forEach(queue::removePlayer));
+            //getPlugin().getLoader().getMatchMakingManager().getQueues().forEach(queue -> queue.getQueuedPlayer().stream().filter(player.getUniqueId()::equals).forEach(queue::removePlayer));
             getPlugin().getApi().getUserManager().removeUser(user);
+            getPlugin().getApi().getUserManager().removeUserFromRedis(user);
         });
     }
 

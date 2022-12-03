@@ -8,12 +8,12 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
+import java.util.Set;
+
 @Getter
 public class RedisManager extends AbstractDatabase {
 
     private JedisPool jedisPool;
-    private Jedis jedis;
-
     private final boolean useSsl;
 
     public RedisManager(DatabaseCredentials credentials, boolean useSsl) {
@@ -25,18 +25,29 @@ public class RedisManager extends AbstractDatabase {
     @Override
     public void connect() {
         this.jedisPool = new JedisPool(new JedisPoolConfig(), getCredentials().getHost(), getCredentials().getPort(), 2000, isUseSsl());
-        this.jedis = jedisPool.getResource();
     }
 
-    public <T> void set(String key, T clazz){
-         getJedis().set(key, GsonUtils.GSON.toJson(clazz));
+    public Jedis getJedis() {
+        return getJedisPool().getResource();
+    }
+
+    public Set<String> keys(String key) {
+        return getJedis().keys(key);
+    }
+
+    public <T> void set(String key, T clazz) {
+        getJedis().set(key, GsonUtils.GSON.toJson(clazz));
+    }
+
+    public void set(String key, String json) {
+        getJedis().set(key, json);
     }
 
     public <T> T get(String key, Class<T> clazz) {
         return GsonUtils.GSON.fromJson(getJedis().get(key), clazz);
     }
 
-    public Object get(String key) {
+    public String get(String key) {
         return getJedis().get(key);
     }
 

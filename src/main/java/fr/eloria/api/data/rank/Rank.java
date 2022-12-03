@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.bson.codecs.pojo.annotations.BsonProperty;
+import org.bson.Document;
 
 import java.util.List;
 
@@ -31,7 +31,6 @@ public class Rank {
 
      */
 
-    @BsonProperty(value = "_id")
     private String name;
 
     private String prefix;
@@ -43,6 +42,14 @@ public class Rank {
         return getPermissions()
                 .stream()
                 .anyMatch(permission::equalsIgnoreCase);
+    }
+
+    public Document toDocument() {
+        return new Document("name", getName())
+                .append("prefix", getPrefix())
+                .append("power", getPower())
+                .append("defaultRank", isDefaultRank())
+                .append("permissions", getPermissions());
     }
 
 }
