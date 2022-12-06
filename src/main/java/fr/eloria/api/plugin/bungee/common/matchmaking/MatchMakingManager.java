@@ -9,9 +9,7 @@ import fr.eloria.api.utils.json.GsonUtils;
 import lombok.Getter;
 import org.bson.Document;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.Queue;
 
 @Getter
 public class MatchMakingManager {

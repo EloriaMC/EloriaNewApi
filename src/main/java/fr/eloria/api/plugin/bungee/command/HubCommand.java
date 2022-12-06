@@ -35,7 +35,11 @@ public class HubCommand extends Command {
                     DNServer requestLobby = BungeeUtils.getServer(args[0]);
 
                     if (requestLobby != null)
-                        player.connect(ProxyServer.getInstance().getServerInfo(requestLobby.getFullName()));
+                        if (requestLobby.getFullName().equals(player.getServer().getInfo().getName()))
+                            player.connect(ProxyServer.getInstance().getServerInfo(requestLobby.getFullName()));
+                        else
+                            player.sendMessage(new TextComponent("Vous êtes déjà sur ce lobby"));
+
                     else
                         player.sendMessage(new TextComponent("Le lobby " + args[0] + " n'existe pas !"));
 

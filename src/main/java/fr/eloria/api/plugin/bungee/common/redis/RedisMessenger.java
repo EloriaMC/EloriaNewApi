@@ -6,22 +6,25 @@ import fr.eloria.api.plugin.bungee.BungeePlugin;
 import fr.eloria.api.plugin.bungee.common.redis.listener.QueueListener;
 import fr.eloria.api.utils.MultiThreading;
 import fr.eloria.api.utils.json.GsonUtils;
+import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;
 import lombok.Getter;
-import redis.clients.jedis.Jedis;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Getter
 public class RedisMessenger {
 
     private final BungeePlugin plugin;
 
+    private final StatefulRedisPubSubConnection<String, String> connection;
     private final List<RedisListener> listeners;
 
     public RedisMessenger(BungeePlugin plugin) {
         this.plugin = plugin;
+        this.connection = getPlugin().getApi().getRedisManager().getRedisClient().connectPubSub();
         this.listeners = Lists.newLinkedList();
     }
 
@@ -41,9 +44,8 @@ public class RedisMessenger {
     public void addListener(RedisListener listener) {
         getListeners().add(listener);
         System.out.println("[RedisManager] Subscribed to " + listener.getName() + " channel");
-        try (Jedis jedis = getPlugin().getApi().getRedisManager().getJedisPool().getResource()) {
-            jedis.subscribe(listener.getPubSub(), listener.getName());
-        }
+        getConnection().addListener(listener.getPubSub());
+        getConnection().async().subscribe(listener.getName());
     }
 
     public void removeListeners(String... channels) {
@@ -51,16 +53,22 @@ public class RedisMessenger {
                 .forEach(this::removeListener);
     }
 
+    public void removeListeners(List<String> channels) {
+        channels.forEach(this::removeListener);
+    }
+
     public void removeListener(String channel) {
+        getConnection().async().unsubscribe(channel);
         getListeners().remove(getListener(channel));
     }
 
     public <T> void sendMessage(String channel, T packet) {
-        getPlugin().getApi().getRedisManager().getJedis().publish(channel, GsonUtils.GSON.toJson(packet));
+        getConnection().async().publish(channel, GsonUtils.GSON.toJson(packet));
     }
 
     public void unload() {
-        getListeners().clear();
+        getConnection().close();
+        removeListeners(getListeners().stream().map(RedisListener::getName).collect(Collectors.toList()));
     }
 
 }

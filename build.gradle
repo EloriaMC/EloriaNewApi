@@ -11,11 +11,15 @@ repositories {
     mavenCentral()
 }
 
+shadowJar {
+    relocate 'io.netty', 'relocated.private.io.netty'
+}
+
 dependencies {
     compileOnly fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'io.netty:netty-all:4.1.85.Final'
     implementation 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
     implementation 'org.mongodb:mongo-java-driver:3.12.11'
-    implementation 'redis.clients:jedis:4.3.1'
-    implementation 'org.slf4j:slf4j-nop:2.0.5'
+    implementation 'io.lettuce:lettuce-core:6.2.1.RELEASE'
 }

@@ -9,11 +9,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import org.bson.codecs.pojo.annotations.BsonIgnore;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
 import java.util.LinkedList;
-import java.util.Queue;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -24,11 +23,8 @@ public class MatchQueue {
 
     @BsonProperty(value = "_id")
     private String name;
-
     private int maxPlayers;
-
-    @BsonIgnore
-    private Queue<UUID> queuedPlayer;
+    private List<UUID> queuedPlayer;
 
     public MatchQueue(String name, int maxPlayers) {
         this.name = name;
