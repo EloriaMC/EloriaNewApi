@@ -2,7 +2,6 @@ package fr.eloria.api.plugin.spigot.common.redis;
 
 import com.google.common.collect.Lists;
 import fr.eloria.api.data.database.redis.RedisListener;
-import fr.eloria.api.data.database.redis.RedisPacket;
 import fr.eloria.api.plugin.spigot.SpigotPlugin;
 import fr.eloria.api.utils.json.GsonUtils;
 import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;

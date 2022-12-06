@@ -28,14 +28,15 @@ public class HubCommand extends Command {
             ProxiedPlayer player = (ProxiedPlayer) sender;
 
             if (args.length == 0)
-                player.connect(ProxyServer.getInstance().getServerInfo(BungeeUtils.getServerWithLessPlayers("lobby").getFullName()));
+                if (!player.getServer().getInfo().getName().startsWith("lobby"))
+                    player.connect(ProxyServer.getInstance().getServerInfo(BungeeUtils.getServerWithLessPlayers("lobby").getFullName()));
 
             if (args.length == 1)
                 if (args[0].startsWith("lobby")) {
                     DNServer requestLobby = BungeeUtils.getServer(args[0]);
 
                     if (requestLobby != null)
-                        if (requestLobby.getFullName().equals(player.getServer().getInfo().getName()))
+                        if (!requestLobby.getFullName().equals(player.getServer().getInfo().getName()))
                             player.connect(ProxyServer.getInstance().getServerInfo(requestLobby.getFullName()));
                         else
                             player.sendMessage(new TextComponent("Vous êtes déjà sur ce lobby"));
