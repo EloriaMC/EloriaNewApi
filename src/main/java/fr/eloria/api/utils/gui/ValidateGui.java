@@ -9,13 +9,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 @Getter
-public class ValidateGui<P extends JavaPlugin> extends Gui<P> {
+@Setter
+public class ValidateGui extends Gui {
 
     private final ItemStack borderItem, informationItem;
-    private final Gui<P> previousGui;
-    @Setter private ValidateAction validateAction;
+    private final Gui previousGui;
+    private ValidateAction validateAction;
 
-    public ValidateGui(P plugin, String inventoryName, ItemStack borderItem, ItemStack informationItem, Gui<P> previousGui, ValidateAction validateAction) {
+    public ValidateGui(JavaPlugin plugin, String inventoryName, ItemStack borderItem, ItemStack informationItem, Gui previousGui, ValidateAction validateAction) {
         super(plugin, inventoryName, 3);
         this.borderItem = borderItem;
         this.informationItem = informationItem;

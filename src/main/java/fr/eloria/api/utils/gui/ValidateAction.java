@@ -6,7 +6,7 @@ public interface ValidateAction {
 
     void validateAction();
 
-    default void denyAction(Gui<?> previousGui, Player player) {
+    default void denyAction(Gui previousGui, Player player) {
         previousGui.onOpen(player);
     }
 

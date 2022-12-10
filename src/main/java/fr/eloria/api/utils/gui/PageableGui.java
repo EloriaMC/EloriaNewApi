@@ -6,14 +6,15 @@ import lombok.Setter;
 import org.bukkit.plugin.java.JavaPlugin;
 
 @Getter
-public abstract class PageableGui<P extends JavaPlugin, E> extends Gui<P> {
+@Setter
+public abstract class PageableGui<E> extends Gui {
 
     private final int maxItems;
 
     private final Pagination<E> pagination;
-    @Setter private Pagination<E>.Page page;
+    private Pagination<E>.Page page;
 
-    protected PageableGui(P plugin, String inventoryName, int rows, int maxItems) {
+    public PageableGui(JavaPlugin plugin, String inventoryName, int rows, int maxItems) {
         super(plugin, inventoryName, rows);
         this.maxItems = maxItems;
         this.pagination = new Pagination<>(getMaxItems());

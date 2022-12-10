@@ -30,6 +30,7 @@ public interface RedisListener {
 
             @Override
             public void punsubscribed(String pattern, long count) {}
+
         };
     }
 

@@ -17,9 +17,9 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.stream.IntStream;
 
 @Getter
-public abstract class Gui<P extends JavaPlugin> {
+public abstract class Gui {
 
-    private final P plugin;
+    private final JavaPlugin plugin;
 
     private final Inventory inventory;
     private final String inventoryName;
@@ -28,7 +28,7 @@ public abstract class Gui<P extends JavaPlugin> {
     private final ConcurrentMap<Integer, GuiButton> buttons;
     private transient GuiButtonListener oldListener;
 
-    protected Gui(P plugin, String inventoryName, int rows) {
+    protected Gui(JavaPlugin plugin, String inventoryName, int rows) {
         this.plugin = plugin;
         this.inventoryName = inventoryName;
         this.rows = rows;

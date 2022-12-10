@@ -2,6 +2,7 @@ package fr.eloria.api.plugin.spigot.listener;
 
 import fr.eloria.api.data.user.User;
 import fr.eloria.api.plugin.spigot.SpigotPlugin;
+import fr.eloria.api.utils.gui.GuiManager;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.Bukkit;
