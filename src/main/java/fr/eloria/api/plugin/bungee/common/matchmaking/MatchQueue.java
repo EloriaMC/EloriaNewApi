@@ -11,7 +11,6 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -45,18 +44,29 @@ public class MatchQueue {
     }
 
     public void addPlayer(UUID uuid) {
-        if (!getQueuedPlayer().contains(uuid)) {
-            getQueuedPlayer().add(uuid);
-            System.out.println("[MatchMakingManager] Added " + ProxyServer.getInstance().getPlayer(uuid).getName() + " to " + getName() + " queue");
-        }
+        getQueuedPlayer().add(uuid);
+        System.out.println("[MatchMakingManager] Added " + ProxyServer.getInstance().getPlayer(uuid).getName() + " to " + getName() + " queue");
     }
 
     public void removePlayer(UUID uuid) {
         getQueuedPlayer().remove(uuid);
+        System.out.println("[MatchMakingManager] Remove " + uuid.toString() + " from " + getName() + " queue");
+    }
+
+    public boolean contains(UUID uuid) {
+        return getQueuedPlayer().contains(uuid);
+    }
+
+    public int getSize() {
+        return getQueuedPlayer().size();
     }
 
     public int getPosition(UUID uuid) {
-        return new LinkedList<>(getQueuedPlayer()).indexOf(uuid);
+        return getQueuedPlayer().indexOf(uuid) + 1;
+    }
+
+    public boolean isEmpty() {
+        return getQueuedPlayer().isEmpty();
     }
 
 }

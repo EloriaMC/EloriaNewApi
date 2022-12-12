@@ -7,9 +7,16 @@ import com.mongodb.client.model.UpdateOptions;
 import fr.eloria.api.plugin.bungee.BungeePlugin;
 import fr.eloria.api.utils.json.GsonUtils;
 import lombok.Getter;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.TextComponent;
+import org.apache.commons.lang3.StringUtils;
 import org.bson.Document;
 
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 
 @Getter
 public class MatchMakingManager {
@@ -23,6 +30,8 @@ public class MatchMakingManager {
         this.plugin = plugin;
         this.queueCollection = plugin.getApi().getMongoManager().getDatabase().getCollection("queues", MatchQueue.class);
         this.queues = Lists.newLinkedList();
+
+        ProxyServer.getInstance().getScheduler().schedule(getPlugin(), this::update, 1L, 1L, TimeUnit.SECONDS);
     }
 
     private String getRedisKey(String queueName) {
@@ -33,19 +42,54 @@ public class MatchMakingManager {
         return getQueues().stream().filter(matchQueue -> queueName.equals(matchQueue.getName())).findFirst().orElse(null);
     }
 
+    public void update() {
+            getQueues().stream().filter(((Predicate<? super MatchQueue>) MatchQueue::isEmpty).negate())
+                    .forEach(matchQueue -> matchQueue.getQueuedPlayer()
+                    .stream().map(getPlugin().getProxy()::getPlayer)
+                    .forEach(player -> player.sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(StringUtils.capitalize(matchQueue.getName()) + " (" + matchQueue.getPosition(player.getUniqueId()) +  "/" + matchQueue.getSize() +  ")"))));
+    }
+
     public void loadQueues() {
         getQueueCollection().find().iterator().forEachRemaining(this::addQueue);
     }
 
     public void saveQueues() {
-        getQueues().stream().map(MatchQueue::getName).forEach(this::removeQueueFromRedis);
-        getQueues().forEach(getQueues()::remove);
+        getQueues().forEach(this::removeQueue);
     }
 
-    private void addQueue(MatchQueue queue) {
+    public void addQueue(MatchQueue queue) {
         sendQueueToRedis(queue);
         getQueues().add(queue);
         System.out.println("[MatchMakingManager] Added " + queue.getName() + " queue");
+    }
+
+    public void removeQueue(String queueName) {
+        removeQueue(getQueue(queueName));
+    }
+
+    public void removeQueue(MatchQueue queue) {
+        removeQueueFromRedis(queue.getName());
+        getQueues().remove(queue);
+        System.out.println("[MatchMakingManager] Remove " + queue.getName() + " queue");
+    }
+
+    public void addPlayer(String queueName, UUID uuid) {
+        if (!getQueue(queueName).getQueuedPlayer().contains(uuid)) {
+            onLogout(uuid);
+            getQueue(queueName).addPlayer(uuid);
+        }
+    }
+
+    public void removeAllPlayers(String queueName) {
+        getQueue(queueName).getQueuedPlayer().clear();
+    }
+
+    public void removePlayer(String queueName, UUID uuid) {
+        getQueue(queueName).removePlayer(uuid);
+    }
+
+    public void onLogout(UUID uuid) {
+        getQueues().stream().filter(queue -> queue.contains(uuid)).findFirst().ifPresent(queue -> removePlayer(queue.getName(), uuid));
     }
 
     public MatchQueue getQueueFromRedis(String queueName) {

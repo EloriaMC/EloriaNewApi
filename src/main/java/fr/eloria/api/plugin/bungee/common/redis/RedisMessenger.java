@@ -43,9 +43,9 @@ public class RedisMessenger {
 
     public void addListener(RedisListener listener) {
         getListeners().add(listener);
-        System.out.println("[RedisManager] Subscribed to " + listener.getName() + " channel");
         getConnection().addListener(listener.getPubSub());
         getConnection().async().subscribe(listener.getName());
+        System.out.println("[RedisManager] Subscribed to " + listener.getName() + " channel");
     }
 
     public void removeListeners(String... channels) {
