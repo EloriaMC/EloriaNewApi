@@ -26,8 +26,8 @@ public class Api extends AbstractHandler {
 
         this.isBungee = isBungee;
 
-        this.mongoManager = new MongoManager(new DatabaseCredentials().setUrl("mongodb://localhost:27017").setDatabaseName("eloria"));
-        this.redisManager = new RedisManager(new DatabaseCredentials().setHost("localhost").setPort(6379));
+        this.mongoManager = new MongoManager(DatabaseCredentials.builder().url("mongodb://localhost:27017").databaseName("eloria").build());
+        this.redisManager = new RedisManager(DatabaseCredentials.builder().host("localhost").port(6379).build());
         
         this.rankManager = new RankManager();
 

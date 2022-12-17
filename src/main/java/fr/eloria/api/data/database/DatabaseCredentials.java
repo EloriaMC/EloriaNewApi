@@ -1,10 +1,11 @@
 package fr.eloria.api.data.database;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Builder
 @Getter
-@NoArgsConstructor
 public class DatabaseCredentials {
 
     private String url, host, username, password, databaseName;
@@ -17,36 +18,6 @@ public class DatabaseCredentials {
         this.password = password;
         this.databaseName = databaseName;
         this.port = port;
-    }
-
-    public DatabaseCredentials setUrl(String url) {
-        this.url = url;
-        return this;
-    }
-
-    public DatabaseCredentials setHost(String host) {
-        this.host = host;
-        return this;
-    }
-
-    public DatabaseCredentials setUsername(String username) {
-        this.username = username;
-        return this;
-    }
-
-    public DatabaseCredentials setPassword(String password) {
-        this.password = password;
-        return this;
-    }
-
-    public DatabaseCredentials setDatabaseName(String databaseName) {
-        this.databaseName = databaseName;
-        return this;
-    }
-
-    public DatabaseCredentials setPort(int port) {
-        this.port = port;
-        return this;
     }
 
 }

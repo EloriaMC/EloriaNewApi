@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -27,6 +28,10 @@ public class PlayerListener implements Listener {
             User user = getPlugin().getApi().getUserManager().getUserFromRedis(player.getUniqueId());
 
             getPlugin().getApi().getUserManager().addUser(user);
+            getPlugin().getLoader().getServerManager().updatePlayers();
+
+            if (getPlugin().getLoader().getServerManager().getServer().getType().getName().equals("lobby"))
+                player.teleport(new Location(Bukkit.getWorld("hub"), 1, 101, 2));
         });
     }
 
@@ -48,6 +53,7 @@ public class PlayerListener implements Listener {
             User user = getPlugin().getApi().getUserManager().getUsers().get(player.getUniqueId());
 
             getPlugin().getApi().getUserManager().removeUser(user);
+            getPlugin().getLoader().getServerManager().updatePlayers();
         });
     }
 

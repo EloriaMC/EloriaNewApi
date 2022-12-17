@@ -15,6 +15,7 @@ public class BungeePlugin extends Plugin {
     public void onEnable() {
         this.api = new Api(true);
         this.loader = new Loader(this);
+
         this.loader.load();
     }
 

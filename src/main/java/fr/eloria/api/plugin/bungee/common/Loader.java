@@ -5,6 +5,7 @@ import fr.eloria.api.plugin.bungee.command.DevCommand;
 import fr.eloria.api.plugin.bungee.command.HubCommand;
 import fr.eloria.api.plugin.bungee.common.matchmaking.MatchMakingManager;
 import fr.eloria.api.plugin.bungee.common.redis.RedisMessenger;
+import fr.eloria.api.plugin.bungee.common.server.ServerManager;
 import fr.eloria.api.plugin.bungee.listener.ProxyListener;
 import fr.eloria.api.utils.AbstractHandler;
 import lombok.Getter;
@@ -19,16 +20,20 @@ public class Loader extends AbstractHandler {
     private final BungeePlugin plugin;
 
     private final RedisMessenger redisMessenger;
+
+    private final ServerManager serverManager;
     private final MatchMakingManager matchMakingManager;
 
     public Loader(BungeePlugin plugin) {
         this.plugin = plugin;
         this.redisMessenger = new RedisMessenger(plugin);
+        this.serverManager = new ServerManager(plugin);
         this.matchMakingManager = new MatchMakingManager(plugin);
     }
 
     @Override
     public void load() {
+        getServerManager().loadTypes();
         getMatchMakingManager().loadQueues();
         getRedisMessenger().load();
 
@@ -48,6 +53,7 @@ public class Loader extends AbstractHandler {
 
     @Override
     public void unload() {
+        getServerManager().saveTypes();
         getMatchMakingManager().saveQueues();
         getRedisMessenger().unload();
     }

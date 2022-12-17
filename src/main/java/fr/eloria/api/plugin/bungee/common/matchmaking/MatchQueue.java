@@ -22,6 +22,7 @@ public class MatchQueue {
 
     @BsonProperty(value = "_id")
     private String name;
+
     private int maxPlayers;
     private List<UUID> queuedPlayer;
 

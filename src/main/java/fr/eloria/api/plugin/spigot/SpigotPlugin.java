@@ -2,6 +2,7 @@ package fr.eloria.api.plugin.spigot;
 
 import fr.eloria.api.Api;
 import fr.eloria.api.plugin.spigot.common.Loader;
+import fr.eloria.api.utils.SpigotUtils;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -15,6 +16,8 @@ public class SpigotPlugin extends JavaPlugin {
     public void onEnable() {
         this.api = new Api(false);
         this.loader = new Loader(this);
+
+        this.loader.load();
     }
 
     @Override

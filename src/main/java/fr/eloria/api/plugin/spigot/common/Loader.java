@@ -5,13 +5,15 @@ import fr.eloria.api.plugin.spigot.SpigotPlugin;
 import fr.eloria.api.plugin.spigot.command.RankCommand;
 import fr.eloria.api.plugin.spigot.command.ServerInfoCommand;
 import fr.eloria.api.plugin.spigot.common.redis.RedisMessenger;
+import fr.eloria.api.plugin.spigot.common.server.ServerManager;
 import fr.eloria.api.plugin.spigot.listener.PlayerListener;
+import fr.eloria.api.plugin.spigot.listener.ServerListener;
 import fr.eloria.api.utils.AbstractHandler;
+import fr.eloria.api.utils.SpigotUtils;
 import fr.eloria.api.utils.command.ECommandHandler;
 import fr.eloria.api.utils.command.annotation.ECommand;
 import fr.eloria.api.utils.command.converter.PlayerConvertor;
 import fr.eloria.api.utils.command.converter.RankConvertor;
-import fr.eloria.api.utils.gui.GuiManager;
 import fr.eloria.api.utils.json.GsonUtils;
 import lombok.Getter;
 import org.bukkit.entity.Player;
@@ -25,17 +27,14 @@ public class Loader extends AbstractHandler {
     private final SpigotPlugin plugin;
 
     private final RedisMessenger redisMessenger;
+    private final ServerManager serverManager;
     private final ECommandHandler commandHandler;
-
-    private final GuiManager guiManager;
 
     public Loader(SpigotPlugin plugin) {
         this.plugin = plugin;
         this.redisMessenger = new RedisMessenger(plugin);
+        this.serverManager = new ServerManager(plugin);
         this.commandHandler = new ECommandHandler(plugin, "api");
-        this.guiManager = new GuiManager(plugin);
-
-        this.load();
     }
 
     @Override
@@ -44,7 +43,7 @@ public class Loader extends AbstractHandler {
         getCommandHandler().registerConverters(new RankConvertor(getPlugin()), new PlayerConvertor());
         getCommandHandler().registerCommands(this, new ServerInfoCommand(getPlugin()), new RankCommand(getPlugin()));
 
-        registerListeners(new PlayerListener(getPlugin()));
+        registerListeners(new ServerListener(getPlugin()), new PlayerListener(getPlugin()));
     }
 
     @ECommand(name = "dev")
@@ -76,6 +75,7 @@ public class Loader extends AbstractHandler {
 
     @Override
     public void unload() {
+        getServerManager().unloadServer(SpigotUtils.getServer());
         getRedisMessenger().unload();
     }
 
