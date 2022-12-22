@@ -2,7 +2,6 @@ package fr.eloria.api.plugin.spigot;
 
 import fr.eloria.api.Api;
 import fr.eloria.api.plugin.spigot.common.Loader;
-import fr.eloria.api.utils.SpigotUtils;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 

@@ -32,14 +32,6 @@ public class MatchQueue {
         this.queuedPlayer = Lists.newLinkedList();
     }
 
-    public void connect(UUID uuid) {
-        DNServer bestServer = BungeeUtils.getServerWithMorePlayers(getName(), getMaxPlayers());
-
-       if (bestServer != null) {
-           getPlayer(uuid).connect(ProxyServer.getInstance().getServerInfo(bestServer.getFullName()));
-       }
-    }
-
     public ProxiedPlayer getPlayer(UUID uuid) {
         return ProxyServer.getInstance().getPlayer(getQueuedPlayer().stream().filter(uuid::equals).findFirst().orElse(null));
     }

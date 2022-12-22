@@ -12,14 +12,13 @@ public class DevCommand extends Command {
     private final BungeePlugin plugin;
 
     public DevCommand(BungeePlugin plugin) {
-        super("qlist");
+        super("slist");
         this.plugin = plugin;
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        getPlugin().getLoader().getServerManager().getServerTypes()
-                .forEach(serverType -> sender.sendMessage(new TextComponent(serverType.getName() + " - " + serverType.getMaxPlayers())));
+        getPlugin().getLoader().getServerManager().getServers().forEach(gameServer -> sender.sendMessage(new TextComponent(gameServer.getName() + " - (" + gameServer.getOnlinePlayers() + "/" + gameServer.getType().getMaxPlayers() + ")")));
     }
 
 }

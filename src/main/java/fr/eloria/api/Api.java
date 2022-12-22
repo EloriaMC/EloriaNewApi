@@ -30,7 +30,6 @@ public class Api extends AbstractHandler {
         this.redisManager = new RedisManager(DatabaseCredentials.builder().host("localhost").port(6379).build());
         
         this.rankManager = new RankManager();
-
         this.userManager = new UserManager();
 
         this.load();

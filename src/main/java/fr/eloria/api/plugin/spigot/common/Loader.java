@@ -14,10 +14,16 @@ import fr.eloria.api.utils.command.ECommandHandler;
 import fr.eloria.api.utils.command.annotation.ECommand;
 import fr.eloria.api.utils.command.converter.PlayerConvertor;
 import fr.eloria.api.utils.command.converter.RankConvertor;
+import fr.eloria.api.utils.item.CustomItemListener;
+import fr.eloria.api.utils.item.CustomItems;
+import fr.eloria.api.utils.item.ItemBuilder;
 import fr.eloria.api.utils.json.GsonUtils;
 import lombok.Getter;
+import org.bukkit.DyeColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 
@@ -43,13 +49,14 @@ public class Loader extends AbstractHandler {
         getCommandHandler().registerConverters(new RankConvertor(getPlugin()), new PlayerConvertor());
         getCommandHandler().registerCommands(this, new ServerInfoCommand(getPlugin()), new RankCommand(getPlugin()));
 
-        registerListeners(new ServerListener(getPlugin()), new PlayerListener(getPlugin()));
+        registerListeners(new ServerListener(getPlugin()), new CustomItemListener(), new PlayerListener(getPlugin()));
     }
 
     @ECommand(name = "dev")
     public void execute(Player sender) {
-        getPlugin().getApi().getRankManager().getRanksOrdainedByPower().forEach(rank -> sender.sendMessage("Grade " + rank.getName() + "#" + rank.getPower()));
-        getPlugin().getApi().getUserManager().getUsers().get(sender.getUniqueId()).setRank(getPlugin().getApi().getRankManager().getRank("Admin"));
+        ItemStack guts = new ItemBuilder(Material.GOLD_SWORD).setName("&6&lGUTS SWORD").setRightClick(event -> event.getPlayer().sendMessage("RIGHT CLICK on GOLDEN SWORD")).toItemStack();
+
+        sender.getInventory().addItem(guts);
     }
 
     @ECommand(name = "queueAdd")

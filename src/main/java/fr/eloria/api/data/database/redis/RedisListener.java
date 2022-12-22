@@ -2,18 +2,20 @@ package fr.eloria.api.data.database.redis;
 
 import io.lettuce.core.pubsub.RedisPubSubListener;
 
+import java.util.function.BiConsumer;
+
 public interface RedisListener {
 
     String getName();
 
-    void onMessage(String channel, String message);
+    BiConsumer<String, String> onMessage();
 
     default RedisPubSubListener<String, String> getPubSub() {
         return new RedisPubSubListener<String, String>() {
 
             @Override
             public void message(String channel, String message) {
-                onMessage(channel, message);
+                onMessage().accept(channel, message);
             }
 
             @Override

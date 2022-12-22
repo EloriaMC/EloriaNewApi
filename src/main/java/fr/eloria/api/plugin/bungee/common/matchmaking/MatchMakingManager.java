@@ -1,19 +1,25 @@
 package fr.eloria.api.plugin.bungee.common.matchmaking;
 
+import be.alexandre01.dnplugin.api.objects.server.DNServer;
 import com.google.common.collect.Lists;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.UpdateOptions;
+import fr.eloria.api.data.server.GameServer;
+import fr.eloria.api.data.user.User;
 import fr.eloria.api.plugin.bungee.BungeePlugin;
+import fr.eloria.api.utils.BungeeUtils;
 import fr.eloria.api.utils.json.GsonUtils;
 import lombok.Getter;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.apache.commons.lang3.StringUtils;
 import org.bson.Document;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
@@ -47,6 +53,29 @@ public class MatchMakingManager {
                     .forEach(matchQueue -> matchQueue.getQueuedPlayer()
                     .stream().map(getPlugin().getProxy()::getPlayer)
                     .forEach(player -> player.sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(StringUtils.capitalize(matchQueue.getName()) + " (" + matchQueue.getPosition(player.getUniqueId()) +  "/" + matchQueue.getSize() +  ")"))));
+    }
+
+    public void connect(MatchQueue queue, UUID uuid) {
+        Optional<GameServer> bestServer = Optional.of(getPlugin().getLoader().getServerManager().getServerWithMorePlayer(queue.getName()));
+        User user = getPlugin().getApi().getUserManager().getUserFromRedis(uuid);
+
+        bestServer.ifPresent(gameServer -> {
+            switch (gameServer.getStatus()) {
+
+                case OPEN:
+
+                    break;
+
+                case PLAYING:
+                    break;
+
+                default:
+                    if (gameServer.getOnlinePlayers() >= gameServer.getType().getMaxPlayers())
+                        if (user.getRank().hasPermission("eloria.queue.bypass"))
+                            ProxyServer.getInstance().getPlayer(uuid).connect(ProxyServer.getInstance().getServerInfo(gameServer.getName()));
+                    break;
+            }
+        });
     }
 
     public void loadQueues() {

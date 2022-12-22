@@ -19,7 +19,6 @@ import java.util.List;
 public class ServerManager {
 
     private final SpigotPlugin plugin;
-
     private GameServer server;
 
     public ServerManager(SpigotPlugin plugin) {
@@ -62,7 +61,7 @@ public class ServerManager {
     }
 
     public ServerType getServerType(String typeName) {
-        return getServerTypes().stream().filter(serverType -> serverType.getName().equals(typeName)).findFirst().orElse(null);
+        return getServerTypes().stream().filter(serverType -> serverType.getName().equals(typeName)).findFirst().orElse(new ServerType(typeName, 999));
     }
 
     public List<ServerType> getServerTypes() {

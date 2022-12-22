@@ -1,5 +1,6 @@
 package fr.eloria.api.utils.gui;
 
+import fr.eloria.api.utils.item.ItemBuilder;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.DyeColor;
@@ -28,21 +29,21 @@ public class ValidateGui extends Gui {
     public void setup() {
         setItems(getBorders(), getBorderItem());
 
-        //setItem(11, confirmButton());
+        setItem(11, confirmButton());
 
         setItem(13, new GuiButton(getInformationItem()));
 
-        //setItem(15, denyButton());
+        setItem(15, denyButton());
     }
 
 
-   /* public GuiButton confirmButton() {
-        return new GuiButton(new ItemBuilder(Material.STAINED_GLASS_PANE).setWoolColor(DyeColor.GREEN).setDisplayName("&7» &aConfirmer").build(), event -> getValidateAction().validateAction());
+   public GuiButton confirmButton() {
+        return new GuiButton(new ItemBuilder(Material.STAINED_GLASS_PANE).setDyeColor(DyeColor.GREEN).setName("&7» &aConfirmer").toItemStack(), event -> getValidateAction().validateAction());
     }
 
     public GuiButton denyButton() {
-        return new GuiButton(new ItemBuilder(Material.STAINED_GLASS_PANE).setWoolColor(DyeColor.RED).setDisplayName("&7» &cAnnuler").build(),
+        return new GuiButton(new ItemBuilder(Material.STAINED_GLASS_PANE).setDyeColor(DyeColor.RED).setName("&7» &cAnnuler").toItemStack(),
                 event -> getValidateAction().denyAction(getPreviousGui(), (Player) event.getWhoClicked()));
-    }*/
+    }
 
 }

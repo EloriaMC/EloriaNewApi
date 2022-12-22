@@ -6,6 +6,8 @@ import fr.eloria.api.plugin.bungee.BungeePlugin;
 import fr.eloria.api.utils.json.GsonUtils;
 import lombok.Getter;
 
+import java.util.function.BiConsumer;
+
 @Getter
 public class QueueListener implements RedisListener {
 
@@ -21,16 +23,15 @@ public class QueueListener implements RedisListener {
     }
 
     @Override
-    public void onMessage(String channel, String message) {
-        QueuePacket packet = GsonUtils.GSON.fromJson(message, QueuePacket.class);
-
-        if (getPlugin().getLoader().getMatchMakingManager().getQueue(packet.getGame()) != null) {
+    public BiConsumer<String, String> onMessage() {
+        return (channel, message) -> {
+            QueuePacket packet = GsonUtils.GSON.fromJson(message, QueuePacket.class);
 
             if (packet.getAction().equals(QueuePacket.QueueAction.ADD))
                 getPlugin().getLoader().getMatchMakingManager().addPlayer(packet.getGame(), packet.getPlayer());
             else
                 getPlugin().getLoader().getMatchMakingManager().removePlayer(packet.getGame(), packet.getPlayer());
-        }
+        };
     }
 
 }
