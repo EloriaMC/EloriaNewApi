@@ -2,7 +2,6 @@ package fr.eloria.api.data.database;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 @Builder

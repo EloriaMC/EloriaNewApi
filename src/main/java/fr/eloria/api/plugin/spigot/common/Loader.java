@@ -15,6 +15,7 @@ import fr.eloria.api.utils.command.annotation.ECommand;
 import fr.eloria.api.utils.command.converter.PlayerConvertor;
 import fr.eloria.api.utils.command.converter.RankConvertor;
 import fr.eloria.api.utils.item.CustomItemListener;
+import fr.eloria.api.utils.item.CustomItems;
 import fr.eloria.api.utils.item.ItemBuilder;
 import fr.eloria.api.utils.json.GsonUtils;
 import lombok.Getter;
@@ -38,7 +39,8 @@ public class Loader extends AbstractHandler {
         this.plugin = plugin;
         this.redisMessenger = new RedisMessenger(plugin);
         this.serverManager = new ServerManager(plugin);
-        this.commandHandler = new ECommandHandler(plugin, "api");
+        this.commandHandler = new ECommandHandler(plugin);
+        //this.boardManager = new BoardManager(plugin, new Board().setTitle("&aEloria"));
     }
 
     @Override
@@ -82,6 +84,7 @@ public class Loader extends AbstractHandler {
     public void unload() {
         getServerManager().unloadServer(SpigotUtils.getServer());
         getRedisMessenger().unload();
+        CustomItems.getCustomItems().clear();
     }
 
 }

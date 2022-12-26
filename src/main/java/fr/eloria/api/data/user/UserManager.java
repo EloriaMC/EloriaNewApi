@@ -46,6 +46,10 @@ public class UserManager {
         getUsers().remove(user.getUuid());
     }
 
+    public User getUser(UUID uuid) {
+        return getUsers().get(uuid);
+    }
+
     public User getUserFromRedis(UUID uuid) {
         return Api.getInstance().getRedisManager().get(getRedisKey(uuid), User.class);
     }

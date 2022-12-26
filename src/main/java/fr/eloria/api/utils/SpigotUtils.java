@@ -8,7 +8,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.rmi.MarshalException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -58,6 +60,12 @@ public class SpigotUtils {
 
     public String coloredText(String message) {
         return ChatColor.translateAlternateColorCodes('&', message);
+    }
+
+    public List<String> coloredTexts(List<String> messages) {
+        List<String> newMessages = new ArrayList<>();
+        messages.forEach(message -> newMessages.add(SpigotUtils.coloredText(message)));
+        return newMessages;
     }
 
     public DecimalFormat decimalFormat() {

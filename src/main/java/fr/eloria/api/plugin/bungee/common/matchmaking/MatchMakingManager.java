@@ -1,5 +1,7 @@
 package fr.eloria.api.plugin.bungee.common.matchmaking;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Lists;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
@@ -28,6 +30,7 @@ public class MatchMakingManager {
 
     private final MongoCollection<MatchQueue> queueCollection;
     private final List<MatchQueue> queues;
+    //private final Cache<String, String> requestedServers;
 
     public MatchMakingManager(BungeePlugin plugin) {
         this.plugin = plugin;

@@ -27,8 +27,8 @@ public class ECommandHandler {
 
     private final List<ECustomCommand> customCommands = Lists.newArrayList();
 
-    public ECommandHandler(JavaPlugin plugin, String fallbackPrefix) {
-        this.fallbackPrefix = fallbackPrefix;
+    public ECommandHandler(JavaPlugin plugin) {
+        this.fallbackPrefix = plugin.getName();
 
         try {
             Field field = plugin.getServer().getClass().getDeclaredField("commandMap");
