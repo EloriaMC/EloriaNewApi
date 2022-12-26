@@ -4,8 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Builder
 @Getter
+@Builder
 public class DatabaseCredentials {
 
     private String url, host, username, password, databaseName;

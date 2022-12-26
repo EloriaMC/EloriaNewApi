@@ -1,8 +1,6 @@
 package fr.eloria.api.plugin.bungee.common.matchmaking;
 
-import be.alexandre01.dnplugin.api.objects.server.DNServer;
 import com.google.common.collect.Lists;
-import fr.eloria.api.utils.BungeeUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

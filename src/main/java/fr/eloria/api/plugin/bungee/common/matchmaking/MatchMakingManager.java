@@ -1,6 +1,5 @@
 package fr.eloria.api.plugin.bungee.common.matchmaking;
 
-import be.alexandre01.dnplugin.api.objects.server.DNServer;
 import com.google.common.collect.Lists;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
@@ -8,13 +7,11 @@ import com.mongodb.client.model.UpdateOptions;
 import fr.eloria.api.data.server.GameServer;
 import fr.eloria.api.data.user.User;
 import fr.eloria.api.plugin.bungee.BungeePlugin;
-import fr.eloria.api.utils.BungeeUtils;
 import fr.eloria.api.utils.json.GsonUtils;
 import lombok.Getter;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.apache.commons.lang3.StringUtils;
 import org.bson.Document;
 
