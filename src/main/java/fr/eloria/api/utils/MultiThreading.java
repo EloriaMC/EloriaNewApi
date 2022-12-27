@@ -1,6 +1,5 @@
 package fr.eloria.api.utils;
 
-
 import lombok.experimental.UtilityClass;
 
 import java.util.concurrent.*;

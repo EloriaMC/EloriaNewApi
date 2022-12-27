@@ -31,6 +31,8 @@ public class PlayerListener implements Listener {
 
             if (getPlugin().getLoader().getServerManager().getServer().getType().getName().equals("lobby"))
                 player.teleport(new Location(Bukkit.getWorld("hub"), 1, 101, 2));
+
+            getPlugin().getLoader().getBoard().onJoin(player);
         });
     }
 
@@ -51,6 +53,7 @@ public class PlayerListener implements Listener {
             Player player = event.getPlayer();
             User user = getPlugin().getApi().getUserManager().getUsers().get(player.getUniqueId());
 
+            getPlugin().getLoader().getBoard().onLeave(player);
             getPlugin().getApi().getUserManager().removeUser(user);
             getPlugin().getLoader().getServerManager().updatePlayers();
         });

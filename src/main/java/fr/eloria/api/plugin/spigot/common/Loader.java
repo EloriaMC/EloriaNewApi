@@ -18,6 +18,7 @@ import fr.eloria.api.utils.item.CustomItemListener;
 import fr.eloria.api.utils.item.CustomItems;
 import fr.eloria.api.utils.item.ItemBuilder;
 import fr.eloria.api.utils.json.GsonUtils;
+import fr.eloria.api.utils.scoreboard.Board;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -35,12 +36,14 @@ public class Loader extends AbstractHandler {
     private final ServerManager serverManager;
     private final ECommandHandler commandHandler;
 
+    private final Board<SpigotPlugin> board;
+
     public Loader(SpigotPlugin plugin) {
         this.plugin = plugin;
         this.redisMessenger = new RedisMessenger(plugin);
         this.serverManager = new ServerManager(plugin);
         this.commandHandler = new ECommandHandler(plugin);
-        //this.boardManager = new BoardManager(plugin, new Board().setTitle("&aEloria"));
+        this.board = new ExampleBoard(plugin);
     }
 
     @Override

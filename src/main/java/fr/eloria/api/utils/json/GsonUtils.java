@@ -14,7 +14,6 @@ public class GsonUtils {
     private Gson buildGson() {
         return new GsonBuilder()
                 .disableHtmlEscaping()
-                //.setPrettyPrinting()
                 .registerTypeAdapter(Rank.class, new RankAdapter())
                 .create();
     }

@@ -1,6 +1,5 @@
 package fr.eloria.api.data.rank;
 
-import com.google.common.collect.Lists;
 import com.google.gson.*;
 
 import java.lang.reflect.Type;

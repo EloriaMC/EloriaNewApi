@@ -12,7 +12,7 @@ public class CustomItemListener implements Listener {
     public void onInteract(PlayerInteractEvent event) {
         ItemStack itemStack = event.getItem();
 
-        if (itemStack != null && CustomItems.contains(itemStack.getItemMeta().getDisplayName())) {
+        if (itemStack != null && event.getClickedBlock() != null && itemStack.hasItemMeta() && CustomItems.contains(itemStack.getItemMeta().getDisplayName())) {
 
             if (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
                 CustomItems.getItem(event.getItem().getItemMeta().getDisplayName()).getRightClick().accept(event);

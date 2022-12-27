@@ -1,7 +1,5 @@
 package fr.eloria.api.plugin.bungee.common.matchmaking;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Lists;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;

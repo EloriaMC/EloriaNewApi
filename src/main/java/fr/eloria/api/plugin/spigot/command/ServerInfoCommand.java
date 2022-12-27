@@ -21,9 +21,11 @@ public class ServerInfoCommand {
         SpigotUtils.sendMessages(sender,
                 "&7» &eInformations",
                 "",
-                "&7» &eServeur: &b" + SpigotUtils.getServerName(),
-                "&7» &eJoueurs: &b" + Bukkit.getOnlinePlayers().size() + "&7/&b" + Bukkit.getServer().getMaxPlayers(),
+                "&7» &eServeur: &b" + getPlugin().getLoader().getServerManager().getServer().getName(),
+                "&7» &eJoueurs: &b" + getPlugin().getLoader().getServerManager().getServer().getOnlinePlayers() + "&7/&b" + getPlugin().getLoader().getServerManager().getServer().getType().getMaxPlayers(),
                 "&7» &eMap: &b" + Bukkit.getWorlds().get(0).getName(),
+                "&7» &eType: &b" + getPlugin().getLoader().getServerManager().getServer().getType().getName(),
+                "&7» &eStatus: &b" + getPlugin().getLoader().getServerManager().getServer().getStatus().getStatus(),
                 "&7» &eVersion: &b" + Bukkit.getServer().getBukkitVersion().split("-")[0],
                 "&7» &eTPS: " + getTps()
                 );
