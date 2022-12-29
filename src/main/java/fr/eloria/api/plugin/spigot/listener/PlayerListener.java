@@ -1,7 +1,9 @@
 package fr.eloria.api.plugin.spigot.listener;
 
+import fr.eloria.api.Api;
 import fr.eloria.api.data.user.User;
 import fr.eloria.api.plugin.spigot.SpigotPlugin;
+import fr.eloria.api.utils.SpigotUtils;
 import fr.eloria.api.utils.handler.AbstractListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -42,7 +44,7 @@ public class PlayerListener extends AbstractListener<SpigotPlugin> {
         Player player = event.getPlayer();
         User user = getPlugin().getApi().getUserManager().getUsers().get(player.getUniqueId());
 
-        event.setFormat(ChatColor.translateAlternateColorCodes('&', user.getRank().getPrefix() + " " + player.getName() + "&7: &f" + event.getMessage()));
+        event.setFormat(SpigotUtils.coloredText(user.getRank().getPrefix() + " " + player.getName() + "&7: &f" + event.getMessage()));
     }
 
     @EventHandler
