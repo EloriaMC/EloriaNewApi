@@ -1,4 +1,4 @@
-package fr.eloria.api.utils;
+package fr.eloria.api.utils.handler;
 
 import lombok.Data;
 

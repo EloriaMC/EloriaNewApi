@@ -6,25 +6,25 @@ import fr.eloria.api.plugin.spigot.command.RankCommand;
 import fr.eloria.api.plugin.spigot.command.ServerInfoCommand;
 import fr.eloria.api.plugin.spigot.common.redis.RedisMessenger;
 import fr.eloria.api.plugin.spigot.common.server.ServerManager;
-import fr.eloria.api.plugin.spigot.listener.PlayerListener;
-import fr.eloria.api.plugin.spigot.listener.ServerListener;
-import fr.eloria.api.utils.AbstractHandler;
+import fr.eloria.api.utils.handler.AbstractHandler;
 import fr.eloria.api.utils.SpigotUtils;
 import fr.eloria.api.utils.command.ECommandHandler;
 import fr.eloria.api.utils.command.annotation.ECommand;
 import fr.eloria.api.utils.command.converter.PlayerConvertor;
 import fr.eloria.api.utils.command.converter.RankConvertor;
-import fr.eloria.api.utils.item.CustomItemListener;
 import fr.eloria.api.utils.item.CustomItems;
 import fr.eloria.api.utils.item.ItemBuilder;
 import fr.eloria.api.utils.json.GsonUtils;
+import fr.eloria.api.utils.handler.AbstractListener;
 import fr.eloria.api.utils.scoreboard.Board;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import org.reflections.Reflections;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
 @Getter
@@ -51,13 +51,12 @@ public class Loader extends AbstractHandler {
         getRedisMessenger().load();
         getCommandHandler().registerConverters(new RankConvertor(getPlugin()), new PlayerConvertor());
         getCommandHandler().registerCommands(this, new ServerInfoCommand(getPlugin()), new RankCommand(getPlugin()));
-
-        registerListeners(new ServerListener(getPlugin()), new CustomItemListener(), new PlayerListener(getPlugin()));
+        registerListeners("fr.eloria.api.plugin.spigot.listener");
     }
 
     @ECommand(name = "dev")
     public void execute(Player sender) {
-        ItemStack guts = new ItemBuilder(Material.GOLD_SWORD).setName("&6&lGUTS SWORD").setRightClick(event -> event.getPlayer().sendMessage("RIGHT CLICK on GOLDEN SWORD")).toItemStack();
+        ItemStack guts = new ItemBuilder(Material.GOLD_SWORD).setName("&6&lGUTS SWORD").setLeftClick(event -> event.getPlayer().sendMessage("RIGHT CLICK on GOLDEN SWORD")).toItemStack();
 
         sender.getInventory().addItem(guts);
     }
@@ -81,6 +80,22 @@ public class Loader extends AbstractHandler {
 
     public void registerListener(Listener listener) {
         getPlugin().getServer().getPluginManager().registerEvents(listener, getPlugin());
+    }
+
+    public void registerListeners(String... packageNames) {
+        Arrays.asList(packageNames)
+                .forEach(this::registerListeners);
+    }
+
+    public void registerListeners(String packageName) {
+        new Reflections(packageName).getSubTypesOf(AbstractListener.class).forEach(clazz -> {
+            try {
+                registerListener(clazz.getDeclaredConstructor(getPlugin().getClass()).newInstance(getPlugin()));
+            } catch (InvocationTargetException | InstantiationException | IllegalAccessException |
+                     NoSuchMethodException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override

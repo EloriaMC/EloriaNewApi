@@ -7,7 +7,7 @@ import fr.eloria.api.plugin.bungee.common.matchmaking.MatchMakingManager;
 import fr.eloria.api.plugin.bungee.common.redis.RedisMessenger;
 import fr.eloria.api.plugin.bungee.common.server.ServerManager;
 import fr.eloria.api.plugin.bungee.listener.ProxyListener;
-import fr.eloria.api.utils.AbstractHandler;
+import fr.eloria.api.utils.handler.AbstractHandler;
 import lombok.Getter;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.Listener;

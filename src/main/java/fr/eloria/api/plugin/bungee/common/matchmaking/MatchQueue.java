@@ -21,12 +21,10 @@ public class MatchQueue {
     @BsonProperty(value = "_id")
     private String name;
 
-    private int maxPlayers;
     private List<UUID> queuedPlayer;
 
-    public MatchQueue(String name, int maxPlayers) {
+    public MatchQueue(String name) {
         this.name = name;
-        this.maxPlayers = maxPlayers;
         this.queuedPlayer = Lists.newLinkedList();
     }
 

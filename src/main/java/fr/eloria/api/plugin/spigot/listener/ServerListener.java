@@ -3,16 +3,14 @@ package fr.eloria.api.plugin.spigot.listener;
 import be.alexandre01.dnplugin.plugins.spigot.api.events.server.ServerAttachedEvent;
 import fr.eloria.api.plugin.spigot.SpigotPlugin;
 import fr.eloria.api.utils.SpigotUtils;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import fr.eloria.api.utils.handler.AbstractListener;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 
-@Getter
-@AllArgsConstructor
-public class ServerListener implements Listener {
+public class ServerListener extends AbstractListener<SpigotPlugin> {
 
-    private final SpigotPlugin plugin;
+    public ServerListener(SpigotPlugin plugin) {
+        super(plugin);
+    }
 
     @EventHandler
     public void onServerStart(ServerAttachedEvent event) {

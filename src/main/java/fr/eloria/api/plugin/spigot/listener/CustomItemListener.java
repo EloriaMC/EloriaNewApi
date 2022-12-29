@@ -1,12 +1,18 @@
-package fr.eloria.api.utils.item;
+package fr.eloria.api.plugin.spigot.listener;
 
+import fr.eloria.api.plugin.spigot.SpigotPlugin;
+import fr.eloria.api.utils.handler.AbstractListener;
+import fr.eloria.api.utils.item.CustomItems;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class CustomItemListener implements Listener {
+public class CustomItemListener extends AbstractListener<SpigotPlugin> {
+
+    public CustomItemListener(SpigotPlugin plugin) {
+        super(plugin);
+    }
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {

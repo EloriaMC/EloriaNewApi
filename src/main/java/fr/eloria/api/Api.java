@@ -5,7 +5,7 @@ import fr.eloria.api.data.database.mongo.MongoManager;
 import fr.eloria.api.data.database.redis.RedisManager;
 import fr.eloria.api.data.rank.RankManager;
 import fr.eloria.api.data.user.UserManager;
-import fr.eloria.api.utils.AbstractHandler;
+import fr.eloria.api.utils.handler.AbstractHandler;
 import lombok.Getter;
 
 @Getter

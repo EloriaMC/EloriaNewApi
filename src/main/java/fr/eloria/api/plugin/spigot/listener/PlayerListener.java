@@ -2,23 +2,21 @@ package fr.eloria.api.plugin.spigot.listener;
 
 import fr.eloria.api.data.user.User;
 import fr.eloria.api.plugin.spigot.SpigotPlugin;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import fr.eloria.api.utils.handler.AbstractListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-@Getter
-@AllArgsConstructor
-public class PlayerListener implements Listener {
+public class PlayerListener extends AbstractListener<SpigotPlugin> {
 
-    private final SpigotPlugin plugin;
+    public PlayerListener(SpigotPlugin plugin) {
+        super(plugin);
+    }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
