@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Getter
 public abstract class Board<P extends JavaPlugin> {
@@ -22,12 +25,15 @@ public abstract class Board<P extends JavaPlugin> {
     private String title;
     private List<String> lines;
 
+    private final ScheduledExecutorService firstExecutor, secondExecutor;
     private final ConcurrentMap<UUID, FastBoard> boards;
 
     public Board(P plugin) {
         this.plugin = plugin;
         this.boards = Maps.newConcurrentMap();
-        plugin.getServer().getScheduler().runTaskTimerAsynchronously(getPlugin(), this::updateBoards, 20,20);
+        this.firstExecutor = Executors.newScheduledThreadPool(16);
+        this.secondExecutor = Executors.newScheduledThreadPool(1);
+        this.updateBoards();
     }
 
     public abstract List<String> getLines(UUID uuid);
@@ -57,7 +63,8 @@ public abstract class Board<P extends JavaPlugin> {
     }
 
     private void updateBoards() {
-        getBoards().forEach((uuid, fastBoard) -> fastBoard.updateLines(getLines(uuid)));
+        getFirstExecutor().scheduleAtFixedRate(() -> getBoards().forEach((uuid, fastBoard) ->
+                getSecondExecutor().execute(() -> fastBoard.updateLines(getLines(uuid)))), 1, 1, TimeUnit.SECONDS);
     }
 
     public void onJoin(Player player) {
