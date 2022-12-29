@@ -6,6 +6,7 @@ import fr.eloria.api.plugin.spigot.command.RankCommand;
 import fr.eloria.api.plugin.spigot.command.ServerInfoCommand;
 import fr.eloria.api.plugin.spigot.common.redis.RedisMessenger;
 import fr.eloria.api.plugin.spigot.common.server.ServerManager;
+import fr.eloria.api.plugin.spigot.listener.CustomItemListener;
 import fr.eloria.api.utils.handler.AbstractHandler;
 import fr.eloria.api.utils.SpigotUtils;
 import fr.eloria.api.utils.command.ECommandHandler;

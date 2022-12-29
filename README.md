@@ -30,3 +30,29 @@ public void onEvent(AnotherEvent event) {
         user.getCoins();
 }
 ```
+
+Server Json :
+
+```json
+{
+    "name": "lobby-0",
+    "onlinePlayers": 1,
+    "status": "OPEN",
+    "type": {
+        "name": "lobby",
+        "maxPlayers": 200
+    }
+}
+```
+
+Rank Json :
+
+```json
+{
+  "name": "Joueur",
+  "prefix": "&7Joueur",
+  "power": 0,
+  "defaultRank": "Joueur",
+  "permissions": []
+}
+```
