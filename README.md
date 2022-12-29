@@ -19,7 +19,7 @@ User usage :
 
 ```java
 @EventHandler 
-public void onChat(AnotherEvent event) {
+public void onEvent(AnotherEvent event) {
         User user = Api.getInstance().getUserManager().getUsers().get(player.getUniqueId());
         
         // If the rank is null it return the default rank
