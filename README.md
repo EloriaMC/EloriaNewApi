@@ -3,7 +3,7 @@
 
 ```java
 // Build command
-./gradlew clean shadowjar
+./gradlew clean shadowJar
 ```
 
 Api usage :
