@@ -14,6 +14,8 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.util.UUID;
+
 public class PlayerListener extends AbstractListener<SpigotPlugin> {
 
     public PlayerListener(SpigotPlugin plugin) {
@@ -42,7 +44,7 @@ public class PlayerListener extends AbstractListener<SpigotPlugin> {
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
-        User user = getPlugin().getApi().getUserManager().getUsers().get(player.getUniqueId());
+        User user = getPlugin().getApi().getUserManager().getUser(player.getUniqueId());
 
         event.setFormat(SpigotUtils.coloredText(user.getRank().getPrefix() + " " + player.getName() + "&7: &f" + event.getMessage()));
     }
