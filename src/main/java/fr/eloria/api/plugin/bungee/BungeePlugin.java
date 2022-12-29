@@ -3,7 +3,6 @@ package fr.eloria.api.plugin.bungee;
 import fr.eloria.api.Api;
 import fr.eloria.api.plugin.bungee.common.Loader;
 import lombok.Getter;
-import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 
 @Getter
