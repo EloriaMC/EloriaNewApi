@@ -20,6 +20,7 @@ User usage :
 ```java
 @EventHandler 
 public void onEvent(AnotherEvent event) {
+        Player player = event.getPlayer();
         User user = Api.getInstance().getUserManager().getUser(player.getUniqueId());
         
         // If the rank is null it return the default rank
@@ -100,7 +101,7 @@ Rank Json :
   "name": "Joueur",
   "prefix": "&7Joueur",
   "power": 0,
-  "defaultRank": "Joueur",
+  "defaultRank": true,
   "permissions": []
 }
 ```
