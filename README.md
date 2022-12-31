@@ -31,6 +31,54 @@ public void onEvent(AnotherEvent event) {
 }
 ```
 
+Redis usage :
+
+```java
+MainClass.getPlugin(SpigotPlugin.class)
+        .getLoader()
+        .getRedisMessenger()
+        .sendMessage("someRedisChannel", new ExamplePacket("Hello world!"));
+
+MainClass.getPlugin(SpigotPlugin.class)
+        .getLoader()
+        .getRedisMessenger()
+        .addListener(new ExampleRedisListener(plugin));
+```
+
+ExamplePacket packet
+```java
+@Getter
+@AllArgsConstructor
+public class ExamplePacket {
+
+    private final String text;
+    
+}
+```
+
+ExampleRedisListener class
+```java
+@AllArgsConstructor
+public class ExampleRedisListener implements RedisListener {
+
+    private final MainClass plugin;
+
+    @Override
+    public String getName() {
+        return "someRedisChannel";
+    }
+
+    @Override
+    public BiConsumer<String, String> onMessage() {
+        return (channel, message) -> {
+            ExamplePacket packet = GsonUtils.GSON.fromJson(message, ExamplePacket.class);
+            System.out.println(packet.getText());
+        };
+    }
+
+}
+```
+
 Server Json :
 
 ```json

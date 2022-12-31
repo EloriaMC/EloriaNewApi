@@ -4,18 +4,16 @@ import fr.eloria.api.data.database.redis.RedisListener;
 import fr.eloria.api.data.database.redis.packet.QueuePacket;
 import fr.eloria.api.plugin.bungee.BungeePlugin;
 import fr.eloria.api.utils.json.GsonUtils;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.function.BiConsumer;
 
 @Getter
+@AllArgsConstructor
 public class QueueListener implements RedisListener {
 
     private final BungeePlugin plugin;
-
-    public QueueListener(BungeePlugin plugin) {
-        this.plugin = plugin;
-    }
 
     @Override
     public String getName() {

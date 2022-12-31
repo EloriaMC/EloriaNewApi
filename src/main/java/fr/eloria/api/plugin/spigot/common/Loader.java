@@ -6,17 +6,16 @@ import fr.eloria.api.plugin.spigot.command.RankCommand;
 import fr.eloria.api.plugin.spigot.command.ServerInfoCommand;
 import fr.eloria.api.plugin.spigot.common.redis.RedisMessenger;
 import fr.eloria.api.plugin.spigot.common.server.ServerManager;
-import fr.eloria.api.plugin.spigot.listener.CustomItemListener;
-import fr.eloria.api.utils.handler.AbstractHandler;
 import fr.eloria.api.utils.SpigotUtils;
 import fr.eloria.api.utils.command.ECommandHandler;
 import fr.eloria.api.utils.command.annotation.ECommand;
 import fr.eloria.api.utils.command.converter.PlayerConvertor;
 import fr.eloria.api.utils.command.converter.RankConvertor;
+import fr.eloria.api.utils.handler.AbstractHandler;
+import fr.eloria.api.utils.handler.AbstractListener;
 import fr.eloria.api.utils.item.CustomItems;
 import fr.eloria.api.utils.item.ItemBuilder;
 import fr.eloria.api.utils.json.GsonUtils;
-import fr.eloria.api.utils.handler.AbstractListener;
 import fr.eloria.api.utils.scoreboard.Board;
 import lombok.Getter;
 import org.bukkit.Material;
@@ -37,14 +36,11 @@ public class Loader extends AbstractHandler {
     private final ServerManager serverManager;
     private final ECommandHandler commandHandler;
 
-    private final Board<SpigotPlugin> board;
-
     public Loader(SpigotPlugin plugin) {
         this.plugin = plugin;
         this.redisMessenger = new RedisMessenger(plugin);
         this.serverManager = new ServerManager(plugin);
         this.commandHandler = new ECommandHandler(plugin);
-        this.board = new ExampleBoard(plugin);
     }
 
     @Override

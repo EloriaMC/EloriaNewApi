@@ -3,8 +3,6 @@ package fr.eloria.api.utils.scoreboard;
 import com.google.common.collect.Maps;
 import fr.eloria.api.utils.SpigotUtils;
 import lombok.Getter;
-import lombok.Setter;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -74,8 +72,7 @@ public abstract class Board<P extends JavaPlugin> {
     }
 
     public void onLeave(Player player) {
-        Optional<FastBoard> fastBoard = Optional.ofNullable(getBoards().remove(player.getUniqueId()));
-        fastBoard.ifPresent(FastBoard::delete);
+        Optional.ofNullable(getBoards().remove(player.getUniqueId())).ifPresent(FastBoard::delete);
     }
 
 }

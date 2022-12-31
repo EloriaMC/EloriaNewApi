@@ -1,20 +1,16 @@
 package fr.eloria.api.plugin.spigot.listener;
 
-import fr.eloria.api.Api;
 import fr.eloria.api.data.user.User;
 import fr.eloria.api.plugin.spigot.SpigotPlugin;
 import fr.eloria.api.utils.SpigotUtils;
 import fr.eloria.api.utils.handler.AbstractListener;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-
-import java.util.UUID;
 
 public class PlayerListener extends AbstractListener<SpigotPlugin> {
 
@@ -32,9 +28,7 @@ public class PlayerListener extends AbstractListener<SpigotPlugin> {
             getPlugin().getLoader().getServerManager().updatePlayers();
 
             if (getPlugin().getLoader().getServerManager().getServer().getType().getName().equals("lobby"))
-                player.teleport(new Location(Bukkit.getWorld("hub"), 1, 101, 2));
-
-            getPlugin().getLoader().getBoard().onJoin(player);
+                player.teleport(new Location(Bukkit.getWorld("hub"), 248, 118, -281));
         });
     }
 
@@ -55,7 +49,6 @@ public class PlayerListener extends AbstractListener<SpigotPlugin> {
             Player player = event.getPlayer();
             User user = getPlugin().getApi().getUserManager().getUsers().get(player.getUniqueId());
 
-            getPlugin().getLoader().getBoard().onLeave(player);
             getPlugin().getApi().getUserManager().removeUser(user);
             getPlugin().getLoader().getServerManager().updatePlayers();
         });
