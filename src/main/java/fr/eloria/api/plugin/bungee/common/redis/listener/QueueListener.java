@@ -4,6 +4,7 @@ import fr.eloria.api.data.database.redis.RedisListener;
 import fr.eloria.api.data.database.redis.packet.QueuePacket;
 import fr.eloria.api.plugin.bungee.BungeePlugin;
 import fr.eloria.api.utils.json.GsonUtils;
+import fr.eloria.api.utils.wrapper.BooleanWrapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -25,10 +26,9 @@ public class QueueListener implements RedisListener {
         return (channel, message) -> {
             QueuePacket packet = GsonUtils.GSON.fromJson(message, QueuePacket.class);
 
-            if (packet.getAction().equals(QueuePacket.QueueAction.ADD))
-                getPlugin().getLoader().getMatchMakingManager().addPlayer(packet.getGame(), packet.getPlayer());
-            else
-                getPlugin().getLoader().getMatchMakingManager().removePlayer(packet.getGame(), packet.getPlayer());
+            BooleanWrapper.of(packet.getAction().equals(QueuePacket.QueueAction.ADD))
+                    .ifTrue(() -> getPlugin().getLoader().getMatchMakingManager().addPlayer(packet.getGame(), packet.getPlayer()))
+                    .ifFalse(() -> getPlugin().getLoader().getMatchMakingManager().removePlayer(packet.getGame(), packet.getPlayer()));
         };
     }
 

@@ -17,7 +17,6 @@ public class SpigotPlugin extends JavaPlugin {
         this.loader = new Loader(this);
 
         this.loader.load();
-        SpigotPlugin.getPlugin(SpigotPlugin.class).getLoader();
     }
 
     @Override

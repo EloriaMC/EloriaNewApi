@@ -29,6 +29,8 @@ public class PlayerListener extends AbstractListener<SpigotPlugin> {
 
             if (getPlugin().getLoader().getServerManager().getServer().getType().getName().equals("lobby"))
                 player.teleport(new Location(Bukkit.getWorld("hub"), 248, 118, -281));
+
+            getPlugin().getLoader().getExampleBoard().onJoin(player);
         });
     }
 
@@ -49,6 +51,7 @@ public class PlayerListener extends AbstractListener<SpigotPlugin> {
             Player player = event.getPlayer();
             User user = getPlugin().getApi().getUserManager().getUsers().get(player.getUniqueId());
 
+            getPlugin().getLoader().getExampleBoard().onLeave(player);
             getPlugin().getApi().getUserManager().removeUser(user);
             getPlugin().getLoader().getServerManager().updatePlayers();
         });

@@ -8,6 +8,7 @@ import fr.eloria.api.data.server.GameServer;
 import fr.eloria.api.data.user.User;
 import fr.eloria.api.plugin.bungee.BungeePlugin;
 import fr.eloria.api.utils.json.GsonUtils;
+import fr.eloria.api.utils.wrapper.BooleanWrapper;
 import lombok.Getter;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.ProxyServer;
@@ -101,10 +102,10 @@ public class MatchMakingManager {
     }
 
     public void addPlayer(String queueName, UUID uuid) {
-        if (!getQueue(queueName).getQueuedPlayer().contains(uuid)) {
-            onLogout(uuid);
-            getQueue(queueName).addPlayer(uuid);
-        }
+        BooleanWrapper.of(getQueue(queueName).getQueuedPlayer().contains(uuid)).ifFalse(() -> {
+                    onLogout(uuid);
+                    getQueue(queueName).addPlayer(uuid);
+                });
     }
 
     public void removeAllPlayers(String queueName) {

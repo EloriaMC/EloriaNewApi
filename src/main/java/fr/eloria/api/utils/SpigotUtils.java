@@ -12,7 +12,9 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @UtilityClass
 public class SpigotUtils {
@@ -65,6 +67,12 @@ public class SpigotUtils {
         List<String> newMessages = new ArrayList<>();
         messages.forEach(message -> newMessages.add(SpigotUtils.coloredText(message)));
         return newMessages;
+    }
+
+    public Map<Integer, String> stringListToMap(List<String> messages) {
+        List<String> newMessages = new ArrayList<>();
+        messages.forEach(message -> newMessages.add(SpigotUtils.coloredText(message)));
+        return newMessages.stream().collect(Collectors.toMap(newMessages::indexOf, s -> s));
     }
 
     public DecimalFormat decimalFormat() {

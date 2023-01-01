@@ -2,14 +2,12 @@ package fr.eloria.api.utils.scoreboard;
 
 import com.google.common.collect.Maps;
 import fr.eloria.api.utils.SpigotUtils;
+import fr.eloria.api.utils.wrapper.OptionalWrapper;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -21,7 +19,7 @@ public abstract class Board<P extends JavaPlugin> {
     private final P plugin;
 
     private String title;
-    private List<String> lines;
+    private Map<Integer, String> lines;
 
     private final ScheduledExecutorService firstExecutor, secondExecutor;
     private final ConcurrentMap<UUID, FastBoard> boards;
@@ -31,6 +29,7 @@ public abstract class Board<P extends JavaPlugin> {
         this.boards = Maps.newConcurrentMap();
         this.firstExecutor = Executors.newScheduledThreadPool(16);
         this.secondExecutor = Executors.newScheduledThreadPool(1);
+        this.lines = Maps.newHashMap();
         this.updateBoards();
     }
 
@@ -41,11 +40,11 @@ public abstract class Board<P extends JavaPlugin> {
     }
 
     public void setLines(String... lines) {
-        this.lines = SpigotUtils.coloredTexts(Arrays.asList(lines));
+        this.lines = SpigotUtils.stringListToMap(Arrays.asList(lines));
     }
 
     public void setLines(List<String> lines) {
-        this.lines = SpigotUtils.coloredTexts(lines);
+        this.lines = SpigotUtils.stringListToMap(lines);
     }
 
     public void updateTitle(String title) {
@@ -53,11 +52,18 @@ public abstract class Board<P extends JavaPlugin> {
     }
 
     public void updateLine(int line, String newLine) {
-        getLines().set(line, SpigotUtils.coloredText(newLine));
+        OptionalWrapper.ofNullable(getLines().get(line))
+                .ifPresent()
+                .apply(s -> getLines().put(line, SpigotUtils.coloredText(newLine)))
+                .elseApply(() -> getLines().putIfAbsent(line, SpigotUtils.coloredText(newLine)));
+    }
+
+    public void addLine(int line, String newLine) {
+        getLines().put(line, SpigotUtils.coloredText(newLine));
     }
 
     public void addLine(String newLine) {
-        getLines().add(newLine);
+        getLines().values().add(SpigotUtils.coloredText(newLine));
     }
 
     private void updateBoards() {

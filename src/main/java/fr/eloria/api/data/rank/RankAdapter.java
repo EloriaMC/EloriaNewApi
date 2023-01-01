@@ -18,7 +18,7 @@ public class RankAdapter implements JsonSerializer<Rank>, JsonDeserializer<Rank>
         jsonObject.addProperty("name", rank.getName());
         jsonObject.addProperty("prefix", rank.getPrefix());
         jsonObject.addProperty("power", rank.getPower());
-        jsonObject.addProperty("defaultRank", rank.getName());
+        jsonObject.addProperty("defaultRank", rank.isDefaultRank());
         jsonObject.add("permissions", jsonArray);
 
         return jsonObject;

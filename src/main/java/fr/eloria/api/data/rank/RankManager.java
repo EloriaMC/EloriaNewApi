@@ -7,6 +7,7 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.UpdateOptions;
 import fr.eloria.api.Api;
 import fr.eloria.api.utils.json.GsonUtils;
+import fr.eloria.api.utils.wrapper.BooleanWrapper;
 import lombok.Getter;
 import org.bson.Document;
 
@@ -32,10 +33,9 @@ public class RankManager {
     }
 
     public void loadRanks() {
-        if (Api.getInstance().isBungee())
-            getRankCollection().find().iterator().forEachRemaining(document -> addRank(GsonUtils.GSON.fromJson(document.toJson(), Rank.class)));
-        else
-            getRanksFromRedis().forEach(this::addRank);
+        BooleanWrapper.of(Api.getInstance().isBungee())
+                .ifTrue(() -> getRankCollection().find().iterator().forEachRemaining(document -> addRank(GsonUtils.GSON.fromJson(document.toJson(), Rank.class))))
+                .ifFalse(() -> getRanksFromRedis().forEach(this::addRank));
     }
 
     public void saveRanks() {
