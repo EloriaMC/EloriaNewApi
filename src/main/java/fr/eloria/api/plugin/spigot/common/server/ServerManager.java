@@ -8,6 +8,7 @@ import fr.eloria.api.data.server.ServerStatus;
 import fr.eloria.api.data.server.ServerType;
 import fr.eloria.api.plugin.spigot.SpigotPlugin;
 import fr.eloria.api.utils.ServerProperties;
+import fr.eloria.api.utils.wrapper.BooleanWrapper;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -36,10 +37,9 @@ public class ServerManager {
     }
 
     public void unloadServer(DNServer dnServer) {
-        setStatus(ServerStatus.CLOSING);
-
-        if (dnServer.getRemoteService().getMods().equals(Mods.DYNAMIC))
-            removeServerFromRedis();
+        BooleanWrapper.of(dnServer.getRemoteService().getMods().equals(Mods.DYNAMIC))
+                .ifTrue(this::removeServerFromRedis)
+                .ifFalse(() -> setStatus(ServerStatus.CLOSING));
     }
 
     public void updatePlayers() {

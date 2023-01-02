@@ -12,7 +12,6 @@ import lombok.Getter;
 import org.bson.Document;
 
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,16 +61,20 @@ public class ServerManager {
         return GsonUtils.GSON.fromJson(getPlugin().getApi().getRedisManager().get(getServerRedisKey(serverName)), GameServer.class);
     }
 
+    public ServerType getType(String typeName) {
+        return getServerTypes().stream().filter(serverType -> serverType.getName().equals(typeName)).findFirst().orElse(null);
+    }
+
     public ServerType getTypeFromRedis(String typeName) {
         return GsonUtils.GSON.fromJson(getPlugin().getApi().getRedisManager().get(getTypeRedisKey(typeName)), ServerType.class);
     }
 
     public List<GameServer> getServers() {
-        return getPlugin().getApi().getRedisManager().keys("servers:*").stream().map(this::getServer).collect(Collectors.toCollection(LinkedList::new));
+        return getPlugin().getApi().getRedisManager().keys("servers:*").stream().map(s -> s.split(":")[2]).map(this::getServer).collect(Collectors.toList());
     }
 
     public List<GameServer> getServers(String typeName) {
-        return getPlugin().getApi().getRedisManager().keys("servers:" + typeName + ":*").stream().map(this::getServer).collect(Collectors.toCollection(LinkedList::new));
+        return getPlugin().getApi().getRedisManager().keys("servers:" + typeName + ":*").stream().map(this::getServer).collect(Collectors.toList());
     }
 
     public GameServer getServerWithLessPlayer(String typeName) {

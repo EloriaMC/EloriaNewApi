@@ -18,9 +18,8 @@ public class BooleanWrapper {
         return this;
     }
 
-    public BooleanWrapper ifFalse(Runnable runnable) {
+    public void ifFalse(Runnable runnable) {
         if (!condition) runnable.run();
-        return this;
     }
 
 }

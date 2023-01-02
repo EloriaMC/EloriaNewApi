@@ -17,7 +17,8 @@ public class RedisManager extends AbstractDatabase {
     private StatefulRedisConnection<String, String> redisConnection;
 
     public RedisManager(DatabaseCredentials credentials) {
-        super(credentials);this.connect();
+        super(credentials);
+        this.connect();
     }
 
     @Override

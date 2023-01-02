@@ -1,6 +1,8 @@
 package fr.eloria.api.plugin.bungee.common;
 
+import be.alexandre01.dnplugin.plugins.bungeecord.api.DNBungeeAPI;
 import fr.eloria.api.plugin.bungee.BungeePlugin;
+import fr.eloria.api.plugin.bungee.common.response.NewGameServerResponse;
 import fr.eloria.api.plugin.bungee.command.DevCommand;
 import fr.eloria.api.plugin.bungee.command.HubCommand;
 import fr.eloria.api.plugin.bungee.common.matchmaking.MatchMakingManager;
@@ -39,6 +41,7 @@ public class Loader extends AbstractHandler {
 
         registerCommands(new HubCommand(getPlugin()), new DevCommand(getPlugin()));
         registerListeners(new ProxyListener(getPlugin()));
+        DNBungeeAPI.getInstance().getBasicClientHandler().getResponses().add(new NewGameServerResponse(getPlugin()));
     }
 
     private void registerListeners(Listener... listeners) {
