@@ -4,7 +4,7 @@ import fr.eloria.api.data.database.redis.packet.QueuePacket;
 import fr.eloria.api.plugin.spigot.SpigotPlugin;
 import fr.eloria.api.plugin.spigot.command.RankCommand;
 import fr.eloria.api.plugin.spigot.command.ServerInfoCommand;
-import fr.eloria.api.plugin.spigot.common.redis.RedisMessenger;
+import fr.eloria.api.plugin.spigot.common.redis.SpigotMessenger;
 import fr.eloria.api.plugin.spigot.common.server.ServerManager;
 import fr.eloria.api.utils.SpigotUtils;
 import fr.eloria.api.utils.command.ECommandHandler;
@@ -16,7 +16,6 @@ import fr.eloria.api.utils.handler.AbstractListener;
 import fr.eloria.api.utils.item.CustomItems;
 import fr.eloria.api.utils.item.ItemBuilder;
 import fr.eloria.api.utils.json.GsonUtils;
-import fr.eloria.api.utils.scoreboard.Board;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -32,7 +31,7 @@ public class Loader extends AbstractHandler {
 
     private final SpigotPlugin plugin;
 
-    private final RedisMessenger redisMessenger;
+    private final SpigotMessenger redisMessenger;
     private final ServerManager serverManager;
     private final ECommandHandler commandHandler;
 
@@ -40,7 +39,7 @@ public class Loader extends AbstractHandler {
 
     public Loader(SpigotPlugin plugin) {
         this.plugin = plugin;
-        this.redisMessenger = new RedisMessenger(plugin);
+        this.redisMessenger = new SpigotMessenger(plugin);
         this.serverManager = new ServerManager(plugin);
         this.commandHandler = new ECommandHandler(plugin);
         this.exampleBoard = new ExampleBoard(plugin);
@@ -73,9 +72,9 @@ public class Loader extends AbstractHandler {
         getRedisMessenger().sendMessage("queue", new QueuePacket("skywars", sender.getUniqueId(), QueuePacket.QueueAction.REMOVE));
     }
 
-    @ECommand(name = "updateLine")
+    @ECommand(name = "testRedisPacket")
     public void executeUpdate(Player sender) {
-        getExampleBoard().updateLine(3, "Test");
+        getRedisMessenger().sendMessage("test", "Hello world!");
     }
 
     public void registerListeners(Listener... listeners) {

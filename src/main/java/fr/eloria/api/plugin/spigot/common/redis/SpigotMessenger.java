@@ -1,35 +1,38 @@
-package fr.eloria.api.plugin.bungee.common.redis;
+package fr.eloria.api.plugin.spigot.common.redis;
 
 import com.google.common.collect.Lists;
 import fr.eloria.api.data.database.redis.RedisListener;
-import fr.eloria.api.plugin.bungee.BungeePlugin;
-import fr.eloria.api.plugin.bungee.common.redis.listener.QueueListener;
-import fr.eloria.api.utils.MultiThreading;
+import fr.eloria.api.data.database.redis.RedisMessenger;
+import fr.eloria.api.data.database.redis.RedisPubSub;
+import fr.eloria.api.plugin.spigot.SpigotPlugin;
 import fr.eloria.api.utils.json.GsonUtils;
 import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;
 import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-@Getter
-public class RedisMessenger {
+public class SpigotMessenger implements RedisMessenger {
 
-    private final BungeePlugin plugin;
+    @Getter private final SpigotPlugin plugin;
 
-    private final StatefulRedisPubSubConnection<String, String> connection;
+    @Getter private final StatefulRedisPubSubConnection<String, String> connection;
     private final List<RedisListener> listeners;
 
-    public RedisMessenger(BungeePlugin plugin) {
+    public SpigotMessenger(SpigotPlugin plugin) {
         this.plugin = plugin;
         this.connection = getPlugin().getApi().getRedisManager().getRedisClient().connectPubSub();
         this.listeners = Lists.newLinkedList();
     }
 
     public void load() {
-        MultiThreading.schedule(() -> addListeners(new QueueListener(getPlugin())), 1, TimeUnit.SECONDS);
+
+    }
+
+    @Override
+    public List<RedisListener> getListeners() {
+        return listeners;
     }
 
     public RedisListener getListener(String channel) {
@@ -37,13 +40,12 @@ public class RedisMessenger {
     }
 
     public void addListeners(RedisListener... listeners) {
-        Arrays.asList(listeners)
-                .forEach(this::addListener);
+        getConnection().addListener(new RedisPubSub(this));
+        Arrays.asList(listeners).forEach(this::addListener);
     }
 
     public void addListener(RedisListener listener) {
         getListeners().add(listener);
-        getConnection().addListener(listener.getPubSub());
         getConnection().async().subscribe(listener.getName());
         System.out.println("[RedisManager] Subscribed to " + listener.getName() + " channel");
     }

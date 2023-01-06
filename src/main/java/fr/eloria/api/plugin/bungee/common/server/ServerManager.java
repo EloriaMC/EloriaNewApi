@@ -5,6 +5,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.UpdateOptions;
 import fr.eloria.api.data.server.GameServer;
+import fr.eloria.api.data.server.ServerStatus;
 import fr.eloria.api.data.server.ServerType;
 import fr.eloria.api.plugin.bungee.BungeePlugin;
 import fr.eloria.api.utils.json.GsonUtils;
@@ -75,6 +76,14 @@ public class ServerManager {
 
     public List<GameServer> getServers(String typeName) {
         return getPlugin().getApi().getRedisManager().keys("servers:" + typeName + ":*").stream().map(this::getServer).collect(Collectors.toList());
+    }
+
+    public List<GameServer> getServers(String typeName, ServerStatus status) {
+        return getServers(typeName).stream().filter(gameServer -> gameServer.getStatus().equals(status)).collect(Collectors.toList());
+    }
+
+    public List<GameServer> getServers(ServerStatus status) {
+        return getServers().stream().filter(gameServer -> gameServer.getStatus().equals(status)).collect(Collectors.toList());
     }
 
     public GameServer getServerWithLessPlayer(String typeName) {

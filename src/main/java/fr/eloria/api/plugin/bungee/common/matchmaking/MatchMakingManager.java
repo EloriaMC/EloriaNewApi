@@ -62,10 +62,16 @@ public class MatchMakingManager {
     }
 
     public void connect(MatchQueue queue, UUID uuid) {
-        Optional<GameServer> bestServer = Optional.of(getPlugin().getLoader().getServerManager().getServerWithMorePlayer(queue.getName()));
-        User user = getPlugin().getApi().getUserManager().getUserFromRedis(uuid);
+        User user = getPlugin().getApi().getUserManager().getUser(uuid);
 
-        bestServer.ifPresent(gameServer -> {
+        OptionalWrapper.ofNullable(getPlugin().getLoader().getServerManager().getServerWithMorePlayer(queue.getName()))
+                .ifPresent()
+                .apply(gameServer -> {
+
+                })
+                .elseApply(() -> addRequestServer(queue.getName()));
+
+        /*bestServer.ifPresent(gameServer -> {
             switch (gameServer.getStatus()) {
 
                 case OPEN:
@@ -81,7 +87,7 @@ public class MatchMakingManager {
                             ProxyServer.getInstance().getPlayer(uuid).connect(ProxyServer.getInstance().getServerInfo(gameServer.getName()));
                     break;
             }
-        });
+        });*/
     }
 
     public void loadQueues() {
@@ -101,7 +107,7 @@ public class MatchMakingManager {
     public void addRequestServer(String serverName) {
         OptionalWrapper.ofNullable(getRequestServer(serverName))
                 .ifNotPresent()
-                .apply(() -> addRequestServer(serverName));
+                .apply(() -> getRequestedServer().add(serverName));
     }
 
     public void removeQueue(String queueName) {
@@ -120,7 +126,8 @@ public class MatchMakingManager {
     }
 
     public void addPlayer(String queueName, UUID uuid) {
-        BooleanWrapper.of(getQueue(queueName).getQueuedPlayer().contains(uuid)).ifFalse(() -> {
+        BooleanWrapper.of(getQueue(queueName).getQueuedPlayer().contains(uuid))
+                .ifFalse(() -> {
                     onLogout(uuid);
                     getQueue(queueName).addPlayer(uuid);
                 });

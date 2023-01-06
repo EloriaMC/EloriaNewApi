@@ -6,7 +6,7 @@ import fr.eloria.api.plugin.bungee.common.response.NewGameServerResponse;
 import fr.eloria.api.plugin.bungee.command.DevCommand;
 import fr.eloria.api.plugin.bungee.command.HubCommand;
 import fr.eloria.api.plugin.bungee.common.matchmaking.MatchMakingManager;
-import fr.eloria.api.plugin.bungee.common.redis.RedisMessenger;
+import fr.eloria.api.plugin.bungee.common.redis.BungeeMessenger;
 import fr.eloria.api.plugin.bungee.common.server.ServerManager;
 import fr.eloria.api.plugin.bungee.listener.ProxyListener;
 import fr.eloria.api.utils.handler.AbstractHandler;
@@ -21,14 +21,14 @@ public class Loader extends AbstractHandler {
 
     private final BungeePlugin plugin;
 
-    private final RedisMessenger redisMessenger;
+    private final BungeeMessenger redisMessenger;
 
     private final ServerManager serverManager;
     private final MatchMakingManager matchMakingManager;
 
     public Loader(BungeePlugin plugin) {
         this.plugin = plugin;
-        this.redisMessenger = new RedisMessenger(plugin);
+        this.redisMessenger = new BungeeMessenger(plugin);
         this.serverManager = new ServerManager(plugin);
         this.matchMakingManager = new MatchMakingManager(plugin);
     }
