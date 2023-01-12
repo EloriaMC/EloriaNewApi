@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.UpdateOptions;
-import fr.eloria.api.data.server.GameServer;
 import fr.eloria.api.data.user.User;
 import fr.eloria.api.plugin.bungee.BungeePlugin;
 import fr.eloria.api.utils.json.GsonUtils;
@@ -14,12 +13,9 @@ import lombok.Getter;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.apache.commons.lang3.StringUtils;
 import org.bson.Document;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
@@ -58,7 +54,7 @@ public class MatchMakingManager {
             getQueues().stream().filter(((Predicate<? super MatchQueue>) MatchQueue::isEmpty).negate())
                     .forEach(matchQueue -> matchQueue.getQueuedPlayer()
                     .stream().map(getPlugin().getProxy()::getPlayer)
-                    .forEach(player -> player.sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(StringUtils.capitalize(matchQueue.getName()) + " (" + matchQueue.getPosition(player.getUniqueId()) +  "/" + matchQueue.getSize() +  ")"))));
+                    .forEach(player -> player.sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(matchQueue.getName() + " (" + matchQueue.getPosition(player.getUniqueId()) +  "/" + matchQueue.getSize() +  ")"))));
     }
 
     public void connect(MatchQueue queue, UUID uuid) {

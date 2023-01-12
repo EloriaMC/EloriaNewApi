@@ -34,6 +34,8 @@ public class ProxyListener implements Listener {
             ProxiedPlayer player = event.getPlayer();
             User user = getPlugin().getApi().getUserManager().getUserFromRedis(player.getUniqueId());
 
+            System.out.println(user.toDocument().toJson());
+
             getPlugin().getApi().getUserManager().sendUserToMongo(user);
 
             getPlugin().getLoader().getMatchMakingManager().onLogout(player.getUniqueId());

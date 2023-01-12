@@ -1,6 +1,7 @@
 package fr.eloria.api.plugin.spigot.common;
 
 import fr.eloria.api.data.database.redis.packet.QueuePacket;
+import fr.eloria.api.data.user.User;
 import fr.eloria.api.plugin.spigot.SpigotPlugin;
 import fr.eloria.api.plugin.spigot.command.RankCommand;
 import fr.eloria.api.plugin.spigot.command.ServerInfoCommand;
@@ -53,11 +54,17 @@ public class Loader extends AbstractHandler {
         registerListeners("fr.eloria.api.plugin.spigot.listener");
     }
 
-    @ECommand(name = "dev")
-    public void execute(Player sender) {
+    @ECommand(name = "devItems")
+    public void executeDevItems(Player sender) {
         ItemStack guts = new ItemBuilder(Material.GOLD_SWORD).setName("&6&lGUTS SWORD").setLeftClick(event -> event.getPlayer().sendMessage("RIGHT CLICK on GOLDEN SWORD")).toItemStack();
 
         sender.getInventory().addItem(guts);
+    }
+
+    @ECommand(name = "devStats")
+    public void executeDevStats(Player sender) {
+        User user = getPlugin().getApi().getUserManager().getUser(sender.getUniqueId());
+        user.addStats("pvpbox", "gamePlayed", 1);
     }
 
     @ECommand(name = "queueAdd")

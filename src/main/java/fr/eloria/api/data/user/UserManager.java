@@ -10,6 +10,7 @@ import fr.eloria.api.utils.json.GsonUtils;
 import lombok.Getter;
 import org.bson.Document;
 
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentMap;
@@ -30,8 +31,10 @@ public class UserManager {
     }
 
     public User getNewUser(UUID uuid) {
-        return new User(uuid, Api.getInstance().getRankManager().getDefaultRank().getName(),
-                new UserSettings(true, true, true, false));
+        return new User(uuid,
+                Api.getInstance().getRankManager().getDefaultRank().getName(),
+                new UserSettings(true, true, true, false),
+                new HashMap<>());
     }
 
     public void saveUsers() {
@@ -51,6 +54,7 @@ public class UserManager {
     }
 
     public User getUserFromRedis(UUID uuid) {
+        System.out.println(Api.getInstance().getRedisManager().get(getRedisKey(uuid), User.class).toDocument().toJson());
         return Api.getInstance().getRedisManager().get(getRedisKey(uuid), User.class);
     }
 
@@ -67,6 +71,7 @@ public class UserManager {
     }
 
     public void sendUserToMongo(User user) {
+        System.out.println(user.toDocument().toJson());
         getUserCollection().updateOne(Filters.eq("uuid", user.getUuid().toString()), new Document("$set", user.toDocument()), new UpdateOptions().upsert(true));
     }
 

@@ -7,7 +7,6 @@ import fr.eloria.api.data.server.GameServer;
 import fr.eloria.api.data.server.ServerStatus;
 import fr.eloria.api.data.server.ServerType;
 import fr.eloria.api.plugin.spigot.SpigotPlugin;
-import fr.eloria.api.utils.ServerProperties;
 import fr.eloria.api.utils.wrapper.BooleanWrapper;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,7 +30,6 @@ public class ServerManager {
     }
 
     public void loadServer(DNServer dnServer) {
-        ServerProperties.setServerProperty(ServerProperties.ServerProperty.MAX_PLAYERS, getServerType(dnServer.getRemoteService().getName()).getMaxPlayers());
         setServer(new GameServer(dnServer.getFullName(), 0, ServerStatus.OPEN, getServerType(dnServer.getRemoteService().getName())));
         sendServerToRedis();
     }

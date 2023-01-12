@@ -6,7 +6,6 @@ import fr.eloria.api.data.database.redis.RedisMessenger;
 import fr.eloria.api.data.database.redis.RedisPubSub;
 import fr.eloria.api.plugin.bungee.BungeePlugin;
 import fr.eloria.api.plugin.bungee.common.redis.listener.QueueListener;
-import fr.eloria.api.plugin.bungee.common.redis.listener.TestListener;
 import fr.eloria.api.utils.MultiThreading;
 import fr.eloria.api.utils.json.GsonUtils;
 import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;
@@ -31,7 +30,7 @@ public class BungeeMessenger implements RedisMessenger {
     }
 
     public void load() {
-        MultiThreading.schedule(() -> addListeners(new TestListener(), new QueueListener(getPlugin())), 1, TimeUnit.SECONDS);
+        MultiThreading.schedule(() -> addListeners(new QueueListener(getPlugin())), 1, TimeUnit.SECONDS);
     }
 
     @Override
