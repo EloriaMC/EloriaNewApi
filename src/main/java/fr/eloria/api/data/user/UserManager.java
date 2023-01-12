@@ -54,7 +54,6 @@ public class UserManager {
     }
 
     public User getUserFromRedis(UUID uuid) {
-        System.out.println(Api.getInstance().getRedisManager().get(getRedisKey(uuid), User.class).toDocument().toJson());
         return Api.getInstance().getRedisManager().get(getRedisKey(uuid), User.class);
     }
 
