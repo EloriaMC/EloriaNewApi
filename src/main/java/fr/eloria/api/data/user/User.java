@@ -24,20 +24,24 @@ public class User {
     private String rankName;
 
     private UserSettings settings;
-    private Map<String, Map<String, String>> stats;
+    private Map<String, Map<String, Object>> stats;
 
     public void setRank(Rank rank) {
         this.rankName = rank.getName();
         Api.getInstance().getUserManager().sendUserToRedis(this);
     }
 
-    public Map<String, String> getStat(String statName) {
+    public Map<String, Object> getStat(String statName) {
         getStats().putIfAbsent(statName, new HashMap<>());
         return getStats().get(statName);
     }
 
+    public Number getStat(String statName, String key) {
+        return (Number) getStat(statName).getOrDefault(key, 0);
+    }
+
     public void addStats(String statName, String key, int value) {
-        getStat(statName).compute(key, (k, v) -> (v == null) ? String.valueOf(value) : String.valueOf(Integer.parseInt(v) + value));
+        getStat(statName).compute(key, (k, v) -> (v == null) ? value : ((Number) v).intValue() + value);
         Api.getInstance().getUserManager().sendUserToRedis(this);
     }
 

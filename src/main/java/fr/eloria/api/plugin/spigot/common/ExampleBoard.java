@@ -20,7 +20,7 @@ public class ExampleBoard extends Board<SpigotPlugin> {
         User user = getPlugin().getApi().getUserManager().getUser(uuid);
 
         updateLine(0, "");
-        updateLine(1, "Played: " + user.getStat("pvpbox").getOrDefault("gamePlayed", "0"));
+        updateLine(1, "Played: " + user.getStat("pvpbox", "gamePlayed").intValue());
         updateLine(2, "");
 
         return new ArrayList<>(getLines().values());

@@ -1,7 +1,6 @@
 package fr.eloria.api.utils.json;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
 import fr.eloria.api.data.rank.Rank;
 import fr.eloria.api.data.rank.RankAdapter;
 import lombok.experimental.UtilityClass;
