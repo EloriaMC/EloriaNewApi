@@ -13,7 +13,7 @@ public class RedisPubSub implements RedisPubSubListener<String, String> {
     @Override
     public void message(String channel, String message) {
         Optional.ofNullable(getChannel(channel))
-                .ifPresent(redisListener -> redisListener.onMessage().accept(channel, message));
+                .ifPresent(redisListener -> redisListener.onMessage().accept(message));
     }
 
     @Override

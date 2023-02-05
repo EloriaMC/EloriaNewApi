@@ -3,8 +3,6 @@ package fr.eloria.api.data.user;
 import fr.eloria.api.Api;
 import fr.eloria.api.data.rank.Rank;
 import fr.eloria.api.data.user.data.UserSettings;
-import fr.eloria.api.utils.wrapper.BooleanWrapper;
-import fr.eloria.api.utils.wrapper.OptionalWrapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +10,6 @@ import org.bson.Document;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 @Getter
@@ -22,6 +19,7 @@ public class User {
 
     private UUID uuid;
     private String rankName;
+    private int coins;
 
     private UserSettings settings;
     private Map<String, Map<String, Object>> stats;
@@ -45,8 +43,16 @@ public class User {
         Api.getInstance().getUserManager().sendUserToRedis(this);
     }
 
-    public void addStats(String statName, String key, String value) {
+    public void addStats(String statName, String key, Object value) {
         getStat(statName).put(key, value);
+    }
+
+    public void addCoins(int coins) {
+        this.coins = getCoins() + coins;
+    }
+
+    public void removeCoins(int coins) {
+        this.coins = getCoins() - coins;
     }
 
     public Rank getRank() {

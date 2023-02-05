@@ -1,11 +1,11 @@
 package fr.eloria.api.data.database.redis;
 
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public interface RedisListener {
 
     String getName();
 
-    BiConsumer<String, String> onMessage();
+    Consumer<String> onMessage();
 
 }

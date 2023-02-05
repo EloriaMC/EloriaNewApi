@@ -33,6 +33,7 @@ public class UserManager {
     public User getNewUser(UUID uuid) {
         return new User(uuid,
                 Api.getInstance().getRankManager().getDefaultRank().getName(),
+                0,
                 new UserSettings(true, true, true, false),
                 new HashMap<>());
     }

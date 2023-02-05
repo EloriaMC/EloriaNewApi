@@ -36,7 +36,7 @@ public class Loader extends AbstractHandler {
     private final ServerManager serverManager;
     private final ECommandHandler commandHandler;
 
-    private ExampleBoard exampleBoard;
+    private final ExampleBoard exampleBoard;
 
     public Loader(SpigotPlugin plugin) {
         this.plugin = plugin;
@@ -77,11 +77,6 @@ public class Loader extends AbstractHandler {
     public void executeRemoveQueue(Player sender) {
         sender.sendMessage(GsonUtils.GSON.toJson(new QueuePacket("skywars", sender.getUniqueId(), QueuePacket.QueueAction.REMOVE)));
         getRedisMessenger().sendMessage("queue", new QueuePacket("skywars", sender.getUniqueId(), QueuePacket.QueueAction.REMOVE));
-    }
-
-    @ECommand(name = "testRedisPacket")
-    public void executeUpdate(Player sender) {
-        getRedisMessenger().sendMessage("test", "Hello world!");
     }
 
     public void registerListeners(Listener... listeners) {
