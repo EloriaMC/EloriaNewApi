@@ -2,11 +2,15 @@ package fr.eloria.api.utils;
 
 import be.alexandre01.dnplugin.api.objects.server.DNServer;
 import be.alexandre01.dnplugin.plugins.bungeecord.api.DNBungeeAPI;
+import fr.eloria.api.data.server.GameServer;
 import lombok.experimental.UtilityClass;
+import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @UtilityClass
@@ -46,6 +50,14 @@ public class BungeeUtils {
 
     public DNServer getServerWithLessPlayers(String serviceName, int maxPlayers) {
         return getServersOrdainedByPlayers(serviceName, maxPlayers).stream().min(onlinePlayersComparator()).orElse(null);
+    }
+
+    public void connectPlayerTo(UUID uuid, GameServer gameServer) {
+        ProxyServer.getInstance().getPlayer(uuid).connect(ProxyServer.getInstance().getServerInfo(gameServer.getName()));
+    }
+
+    public void connectPlayerTo(ProxiedPlayer player, GameServer gameServer) {
+        connectPlayerTo(player.getUniqueId(), gameServer);
     }
 
     public Comparator<DNServer> onlinePlayersComparator() {

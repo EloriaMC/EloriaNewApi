@@ -1,11 +1,14 @@
 package fr.eloria.api.plugin.bungee.common.matchmaking;
 
+import be.alexandre01.dnplugin.api.request.RequestType;
+import be.alexandre01.dnplugin.plugins.bungeecord.api.DNBungeeAPI;
 import com.google.common.collect.Lists;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.UpdateOptions;
 import fr.eloria.api.data.user.User;
 import fr.eloria.api.plugin.bungee.BungeePlugin;
+import fr.eloria.api.utils.BungeeUtils;
 import fr.eloria.api.utils.json.GsonUtils;
 import fr.eloria.api.utils.wrapper.BooleanWrapper;
 import fr.eloria.api.utils.wrapper.OptionalWrapper;
@@ -54,7 +57,10 @@ public class MatchMakingManager {
             getQueues().stream().filter(((Predicate<? super MatchQueue>) MatchQueue::isEmpty).negate())
                     .forEach(matchQueue -> matchQueue.getQueuedPlayer()
                     .stream().map(getPlugin().getProxy()::getPlayer)
-                    .forEach(player -> player.sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(matchQueue.getName() + " (" + matchQueue.getPosition(player.getUniqueId()) +  "/" + matchQueue.getSize() +  ")"))));
+                    .forEach(player -> {
+                        player.sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(matchQueue.getName() + " (" + matchQueue.getPosition(player.getUniqueId()) +  "/" + matchQueue.getSize() +  ")"));
+                        connect(matchQueue, matchQueue.getFirstPlayer());
+                    }));
     }
 
     public void connect(MatchQueue queue, UUID uuid) {
@@ -63,9 +69,14 @@ public class MatchMakingManager {
         OptionalWrapper.ofNullable(getPlugin().getLoader().getServerManager().getServerWithMorePlayer(queue.getName()))
                 .ifPresent()
                 .apply(gameServer -> {
-
+                    BungeeUtils.connectPlayerTo(uuid, gameServer);
+                    queue.removePlayer(uuid);
+                    System.out.println("1");
                 })
-                .elseApply(() -> addRequestServer(queue.getName()));
+                .elseApply(() ->  {
+                    addRequestServer(queue.getName());
+                    System.out.println("2");
+                });
 
         /*bestServer.ifPresent(gameServer -> {
             switch (gameServer.getStatus()) {
@@ -101,9 +112,12 @@ public class MatchMakingManager {
     }
 
     public void addRequestServer(String serverName) {
-        OptionalWrapper.ofNullable(getRequestServer(serverName))
-                .ifNotPresent()
-                .apply(() -> getRequestedServer().add(serverName));
+        BooleanWrapper.of(getRequestedServer().contains(serverName) && getPlugin().getLoader().getServerManager().getServers(serverName).isEmpty())
+                        .ifFalse(() -> {
+                            System.out.println("addRequestServer");
+                            getRequestedServer().add(serverName);
+                            DNBungeeAPI.getInstance().getRequestManager().sendRequest(RequestType.CORE_START_SERVER, serverName);
+                        });
     }
 
     public void removeQueue(String queueName) {

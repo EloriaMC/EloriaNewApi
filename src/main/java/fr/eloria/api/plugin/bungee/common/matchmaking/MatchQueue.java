@@ -32,6 +32,10 @@ public class MatchQueue {
         return ProxyServer.getInstance().getPlayer(getQueuedPlayer().stream().filter(uuid::equals).findFirst().orElse(null));
     }
 
+    public UUID getFirstPlayer() {
+        return getQueuedPlayer().get(0);
+    }
+
     public void addPlayer(UUID uuid) {
         getQueuedPlayer().add(uuid);
         System.out.println("[MatchMakingManager] Added " + ProxyServer.getInstance().getPlayer(uuid).getName() + " to " + getName() + " queue");

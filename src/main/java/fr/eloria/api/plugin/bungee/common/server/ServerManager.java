@@ -75,7 +75,7 @@ public class ServerManager {
     }
 
     public List<GameServer> getServers(String typeName) {
-        return getPlugin().getApi().getRedisManager().keys("servers:" + typeName + ":*").stream().map(this::getServer).collect(Collectors.toList());
+        return getServers().stream().filter(gameServer -> gameServer.getType().getName().equals(typeName)).collect(Collectors.toList());
     }
 
     public List<GameServer> getServers(String typeName, ServerStatus status) {

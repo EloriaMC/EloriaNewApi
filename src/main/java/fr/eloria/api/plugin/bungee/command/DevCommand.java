@@ -2,6 +2,7 @@ package fr.eloria.api.plugin.bungee.command;
 
 import fr.eloria.api.plugin.bungee.BungeePlugin;
 import fr.eloria.api.utils.BungeeUtils;
+import fr.eloria.api.utils.wrapper.OptionalWrapper;
 import lombok.Getter;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
@@ -34,6 +35,14 @@ public class DevCommand extends Command {
         sender.sendMessage(new TextComponent("Requested Servers :"));
         getPlugin().getLoader().getMatchMakingManager().getRequestedServer()
                 .forEach(s -> sender.sendMessage(new TextComponent(s)));
+
+        getPlugin().getLoader().getServerManager().getServers().forEach(gameServer -> sender.sendMessage(new TextComponent(gameServer.getName())));
+        getPlugin().getLoader().getServerManager().getServers("lobby").forEach(gameServer -> sender.sendMessage(new TextComponent(gameServer.getName())));
+
+        OptionalWrapper.ofNullable(getPlugin().getLoader().getServerManager().getServerWithMorePlayer("skywars"))
+                .ifPresent()
+                .apply(s -> sender.sendMessage(new TextComponent(s.getName())))
+                .elseApply(() -> sender.sendMessage(new TextComponent("Aucun serveur skywars allumé !")));
     }
 
 }

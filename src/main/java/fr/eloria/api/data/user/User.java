@@ -43,6 +43,16 @@ public class User {
         Api.getInstance().getUserManager().sendUserToRedis(this);
     }
 
+    public void addStats(String statName, String key, double value) {
+        getStat(statName).compute(key, (k, v) -> (v == null) ? value : ((Number) v).doubleValue() + value);
+        Api.getInstance().getUserManager().sendUserToRedis(this);
+    }
+
+    public void addStats(String statName, String key, long value) {
+        getStat(statName).compute(key, (k, v) -> (v == null) ? value : ((Number) v).longValue() + value);
+        Api.getInstance().getUserManager().sendUserToRedis(this);
+    }
+
     public void addStats(String statName, String key, Object value) {
         getStat(statName).put(key, value);
     }
